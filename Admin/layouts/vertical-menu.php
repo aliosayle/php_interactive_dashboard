@@ -399,8 +399,9 @@
                         <span data-key="t-authentication"><?php echo $language["Authentication"]; ?></span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="pages-login.php" data-key="t-login"><?php echo $language["Login"]; ?></a></li>
-                        <li><a href="pages-register.php" data-key="t-register"><?php echo $language["Register"]; ?></a></li>
+                        <li><a href="sites.php" data-key="t-data-tables">Sites</a></li>
+                        <li><a href="companies.php" data-key="t-data-tables">Companies</a></li>
+                        <li><a href="register.php" data-key="t-register"><?php echo $language["Register"]; ?></a></li>
                         <li><a href="pages-recoverpw.php" data-key="t-recover-password"><?php echo $language["Recover_Password"]; ?></a></li>
                         <li><a href="auth-lock-screen.php" data-key="t-lock-screen"><?php echo $language["Lock_Screen"]; ?></a></li>
                         <li><a href="auth-confirm-mail.php" data-key="t-confirm-mail"><?php echo $language["Confirm_Mail"]; ?></a></li>

@@ -51,8 +51,6 @@ function isAdmin($user_id) {
         error_log("Error preparing SQL statement: " . mysqli_error($link));
     }
 
-    // Close the database connection
-    mysqli_close($link);
 
     return $is_admin;
 }
