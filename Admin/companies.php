@@ -1,4 +1,16 @@
 <?php
+// Start the session to access session variables
+session_start();
+
+
+if (isset($_SESSION['delete_message'])) {
+    echo "<script>alert('" . $_SESSION['delete_message'] . "');</script>";
+    // Unset the session variable after displaying the message
+    unset($_SESSION['delete_message']);
+}
+?>
+
+<?php
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -56,15 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                             </div>
                             <div class="card-body">
                                 <!-- Add New Company Form -->
-                                <form method="POST" action="" class="mb-4 d-flex align-items-center">
-                                    <div class="form-group me-3 d-flex">
-                                        <label for="company_name" class="mr-2">Company Name</label>
-                                        <input type="text" name="company_name" id="company_name" class="form-control" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary d-flex align-items-center">
-                                        <i class="fas fa-plus me-2"></i> Add Company
+                                <form method="POST" action="add_company.php" class="mb-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-plus me-2"></i> Add New Company
                                     </button>
                                 </form>
+
 
                                 <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                                     <thead>

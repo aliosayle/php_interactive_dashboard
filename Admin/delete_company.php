@@ -23,10 +23,17 @@ $stmt = mysqli_prepare($link, $delete_query);
 mysqli_stmt_bind_param($stmt, "i", $company_id);
 
 if (mysqli_stmt_execute($stmt)) {
-    // Redirect to companies.php after successful deletion
-    header('Location: companies.php');
-    exit;
+    // Set session variable to indicate success
+    $_SESSION['delete_message'] = 'Company deleted successfully';
 } else {
-    die("Failed to delete company.");
+    // Set session variable to indicate error
+    $_SESSION['delete_message'] = 'Error deleting company: ' . mysqli_error($link);
 }
+
+// Output JavaScript to show alert and redirect after dismissal
+echo "<script type='text/javascript'>
+        alert('" . $_SESSION['delete_message'] . "');
+        window.location.href = 'companies.php';
+      </script>";
+exit;
 ?>
