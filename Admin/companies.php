@@ -111,10 +111,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                                       </button>";
                                                 echo "</form>";
 
-                                                // Delete Button
-                                                echo '<button type="button" class="btn btn-danger btn-sm action-button' . ($permissions['candelete'] == 0 ? ' disabled' : '') . ' waves-effect waves-light" onclick="deleteCompany(' . $row["id"] . ')">
-                                                        <i class="mdi mdi-trash-can d-block font-size-16"></i> Delete
-                                                      </button>';
+                                                // Delete Button with direct link to delete_company.php
+                                                echo "<form method='GET' action='delete_company.php' style='display:inline-block;'>";
+                                                echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                echo "<button type='submit' class='btn btn-danger btn-sm action-button' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . ">
+                                                        <i class='mdi mdi-trash-can d-block font-size-16'></i> Delete
+                                                      </button>";
+                                                echo "</form>";
 
                                                 echo "</td>";
                                                 echo "</tr>";
@@ -164,23 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
             "responsive": true
         });
     });
-
-    function deleteCompany(companyId) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = 'delete_company.php?id=' + companyId;
-            }
-        });
-    }
 </script>
+
 <style>
     .action-button {
         width: 100px; /* Keep buttons inside the table and the same size */
