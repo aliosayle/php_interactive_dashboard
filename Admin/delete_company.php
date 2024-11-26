@@ -36,7 +36,9 @@ if (mysqli_stmt_execute($stmt)) {
     $_SESSION['delete_message'] = 'Error deleting company: ' . mysqli_error($link);
 }
 
-// Redirect back to companies page
+// Close the statement and redirect back to companies page
+mysqli_stmt_close($stmt);
+
 header('Location: companies.php');
 exit;
 ?>
