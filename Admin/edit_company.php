@@ -61,6 +61,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="main-content">
         <div class="page-content">
             <div class="container-fluid">
+                <!-- Breadcrumb -->
+                <div class="row">
+                    <div class="col-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="dashboard.php" class="breadcrumb-link">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="companies.php" class="breadcrumb-link">Companies</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Edit Company</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -71,11 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <?php if (isset($error)) { echo "<div class='alert alert-danger'>$error</div>"; } ?>
 
                                 <form method="POST" action="">
-                                    <div class="form-group">
-                                        <label for="company_name">Company Name</label>
-                                        <input type="text" class="form-control" id="company_name" name="company_name" value="<?php echo htmlspecialchars($company['company_name']); ?>" required>
+                                    <div class="form-group d-flex align-items-center">
+                                        <label for="company_name" class="mr-2">Company Name</label>
+                                        <input type="text" class="form-control" id="company_name" name="company_name" value="<?php echo htmlspecialchars($company['company_name']); ?>" required style="height: calc(2.25rem + 2px);">
+                                        <button type="submit" class="btn btn-primary" style="height: calc(2.25rem + 2px); min-width: 150px; margin-left: 10px;">Update Company</button>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Update Company</button>
                                 </form>
                             </div>
                         </div>
@@ -90,6 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <?php include 'layouts/vendor-scripts.php'; ?>
 <script src="assets/js/app.js"></script>
+
+<!-- Add JavaScript to alert the user when they click on breadcrumb links -->
+<script>
+    document.querySelectorAll('.breadcrumb-link').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            if (!confirm("Are you sure you want to leave this page? Any unsaved changes will be lost.")) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
