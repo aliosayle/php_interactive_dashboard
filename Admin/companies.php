@@ -1,14 +1,20 @@
 <?php
-// Start the session to access session variables
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 
 if (isset($_SESSION['delete_message'])) {
-    echo "<script>alert('" . $_SESSION['delete_message'] . "');</script>";
-    // Unset the session variable after displaying the message
-    unset($_SESSION['delete_message']);
+    $alert_type = strpos($_SESSION['delete_message'], 'successfully') !== false ? 'success' : 'danger';
+    echo "<div class='alert alert-$alert_type alert-dismissible fade show' role='alert'>
+            " . $_SESSION['delete_message'] . "
+            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+          </div>";
+    unset($_SESSION['delete_message']); // Unset after using it
 }
 ?>
+
+
 
 <?php
 // Enable error reporting
@@ -48,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
 
     <!-- Include FontAwesome CDN for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- for alert -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <?php include 'layouts/head-style.php'; ?>
 </head>
@@ -63,9 +71,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Companies Table</h4>
-                            </div>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Companies Table</h4>
+                            <!-- Breadcrumb -->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Companies</li>
+                                </ol>
+                            </nav>
+                        </div>
+
                             <div class="card-body">
                                 <!-- Add New Company Form -->
                                 <form method="POST" action="add_company.php" class="mb-4">
@@ -151,5 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
 </script>
 
 <script src="assets/js/app.js"></script>
+<!-- script for alert -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

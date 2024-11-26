@@ -44,92 +44,107 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['site_name'])) {
     <?php include 'layouts/menu.php'; ?>
 
     <div class="main-content">
-        <div class="page-content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Sites Table</h4>
-                                <!-- Button to open the form -->
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSiteModal">Add Site</button>
-                            </div>
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- Breadcrumb -->
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="sites.php">Sites</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Current Page</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- End of Breadcrumb -->
 
-                            <!-- Modal for adding new site -->
-                            <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Add New Site</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <form method="POST" action="current_page.php">
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="site_name">Site Name</label>
-                                                    <input type="text" class="form-control" id="site_name" name="site_name" required>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Add Site</button>
-                                            </div>
-                                        </form>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Sites Table</h4>
+                            <!-- Button to open the form -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSiteModal" href="add_site.php">Add Site</button>
+                        </div>
+
+                        <!-- Modal for adding new site -->
+                        <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add New Site</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
+                                    <form method="POST" action="current_page.php">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="site_name">Site Name</label>
+                                                <input type="text" class="form-control" id="site_name" name="site_name" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Add Site</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="card-body">
-                                <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Site Name</th>
-                                            <th>Actions</th> <!-- Add Actions column -->
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        // Debugging connection state
-                                        if (!$link) {
-                                            die("Database connection error: " . mysqli_connect_error());
+                        <div class="card-body">
+                            <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Site Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    // Debugging connection state
+                                    if (!$link) {
+                                        die("Database connection error: " . mysqli_connect_error());
+                                    }
+
+                                    // Fetch data
+                                    $query = "SELECT id, site_name FROM sites";
+                                    $result = mysqli_query($link, $query);
+
+                                    // Check if the query executed successfully
+                                    if (!$result) {
+                                        die("Query failed: " . mysqli_error($link));
+                                    }
+
+                                    // Populate table rows
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                                            echo "<td>" . htmlspecialchars($row['site_name']) . "</td>";
+                                            echo "<td>
+                                                    <a href='edit_site.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>Edit</a>
+                                                    <a href='delete_site.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this site?\")'>Delete</a>
+                                                  </td>"; // Edit and Delete buttons
+                                            echo "</tr>";
                                         }
-
-                                        // Fetch data
-                                        $query = "SELECT id, site_name FROM sites";
-                                        $result = mysqli_query($link, $query);
-
-                                        // Check if the query executed successfully
-                                        if (!$result) {
-                                            die("Query failed: " . mysqli_error($link));
-                                        }
-
-                                        // Populate table rows
-                                        if (mysqli_num_rows($result) > 0) {
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                echo "<tr>";
-                                                echo "<td>" . htmlspecialchars($row['id']) . "</td>";
-                                                echo "<td>" . htmlspecialchars($row['site_name']) . "</td>";
-                                                echo "<td>
-                                                        <a href='edit_site.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>Edit</a>
-                                                        <a href='delete_site.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this site?\")'>Delete</a>
-                                                      </td>"; // Edit and Delete buttons
-                                                echo "</tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='3'>No data found</td></tr>"; // Updated colspan for 3 columns
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    } else {
+                                        echo "<tr><td colspan='3'>No data found</td></tr>"; // Updated colspan for 3 columns
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
 
         <?php include 'layouts/footer.php'; ?>
     </div>

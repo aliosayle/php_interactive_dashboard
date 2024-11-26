@@ -3,37 +3,40 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include 'layouts/session.php';
-include 'layouts/head-main.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 include 'layouts/config.php';
 
 if (!$link) {
     die("Connection not established: " . mysqli_connect_error());
 }
 
-$company_id = isset($_GET['id']) ? $_GET['id'] : '';
+// Retrieve and validate company ID from GET parameters
+$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (!$company_id) {
-    die("Company ID is missing.");
+    // If no valid ID, set an error message and redirect back
+    $_SESSION['delete_message'] = 'Invalid company ID.';
+    header('Location: companies.php');
+    exit;
 }
 
-// Delete company record
+// Prepare and execute delete query
 $delete_query = "DELETE FROM companies WHERE id = ?";
 $stmt = mysqli_prepare($link, $delete_query);
 mysqli_stmt_bind_param($stmt, "i", $company_id);
 
 if (mysqli_stmt_execute($stmt)) {
-    // Set session variable to indicate success
-    $_SESSION['delete_message'] = 'Company deleted successfully';
+    // If the deletion is successful, set a success message
+    $_SESSION['delete_message'] = 'Company deleted successfully.';
 } else {
-    // Set session variable to indicate error
+    // If deletion fails, set an error message with details
     $_SESSION['delete_message'] = 'Error deleting company: ' . mysqli_error($link);
 }
 
-// Output JavaScript to show alert and redirect after dismissal
-echo "<script type='text/javascript'>
-        alert('" . $_SESSION['delete_message'] . "');
-        window.location.href = 'companies.php';
-      </script>";
+// Redirect back to companies page
+header('Location: companies.php');
 exit;
 ?>
