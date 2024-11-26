@@ -51,6 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
+
 
     <?php include 'layouts/head-style.php'; ?>
 </head>
@@ -68,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                         <!-- Breadcrumb above the card -->
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-3">
-                                <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Companies</li>
                             </ol>
                         </nav>
@@ -109,9 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                                                 echo "<tr>";
                                                 echo "<td>" . htmlspecialchars($row['id']) . "</td>";
                                                 echo "<td>" . htmlspecialchars($row['company_name']) . "</td>";
-                                                echo "<td>";
+                                                echo "<td class='text-center'>";
                                                 echo "<a href='edit_company.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'><i class='fas fa-edit'></i> Edit</a> ";
-                                                echo "<a href='delete_company.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete?\")'><i class='fas fa-trash'></i> Delete</a>";
+                                                echo '<button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="deleteCompany(' . $row["id"] . ')">
+                                                <i class="fas fa-trash"></i> Delete
+                                              </button>';
+                                        
                                                 echo "</td>";
                                                 echo "</tr>";
                                             }
@@ -127,12 +133,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                 </div>
             </div>
         </div>
-
-        <?php include 'layouts/footer.php'; ?>
-    </div>
-</div>
-
-    <?php include 'layouts/menu.php'; ?>
 
         <?php include 'layouts/footer.php'; ?>
     </div>
@@ -164,6 +164,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+<script>function deleteCompany(companyId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to delete page with the company ID
+            window.location.href = 'delete_company.php?id=' + companyId;
+        }
+    });
+}
+</script>
 
 </body>
 </html>
