@@ -2,43 +2,44 @@
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+include 'layouts/session.php';
+include 'layouts/head-main.php';
 include 'layouts/config.php';
 
 if (!$link) {
     die("Connection not established: " . mysqli_connect_error());
 }
 
-// Retrieve and validate company ID from GET parameters
-$company_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-if (!$company_id) {
-    // If no valid ID, set an error message and redirect back
-    $_SESSION['delete_message'] = 'Invalid company ID.';
-    header('Location: companies.php');
-    exit;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-// Prepare and execute delete query
-$delete_query = "DELETE FROM companies WHERE id = ?";
-$stmt = mysqli_prepare($link, $delete_query);
-mysqli_stmt_bind_param($stmt, "i", $company_id);
+// Check if user is logged in
+if (!isset($_SESSION['id'])) {
+    $_SESSION['delete_message'] = "You must be logged in to delete a company.";
+    header("Location: companies_table.php");
+    exit();
+}
 
-if (mysqli_stmt_execute($stmt)) {
-    // If the deletion is successful, set a success message
-    $_SESSION['delete_message'] = 'Company deleted successfully.';
+// Fetch user permissions
+$user_id = $_SESSION['id'];
+$permission_query = "SELECT candelete FROM users WHERE id = '$user_id'";
+$permission_result = mysqli_query($link, $permission_query);
+$permissions = mysqli_fetch_assoc($permission_result);
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']) && $permissions['candelete'] == 1) {
+    $company_id = mysqli_real_escape_string($link, $_GET['id']);
+    
+    $delete_query = "DELETE FROM companies WHERE id = '$company_id'";
+    if (mysqli_query($link, $delete_query)) {
+        $_SESSION['delete_message'] = "Company deleted successfully.";
+    } else {
+        $_SESSION['delete_message'] = "Error deleting company: " . mysqli_error($link);
+    }
 } else {
-    // If deletion fails, set an error message with details
-    $_SESSION['delete_message'] = 'Error deleting company: ' . mysqli_error($link);
+    $_SESSION['delete_message'] = "You do not have permission to delete companies.";
 }
 
-// Close the statement and redirect back to companies page
-mysqli_stmt_close($stmt);
-
-header('Location: companies.php');
-exit;
+header("Location: companies.php");
+exit();
 ?>

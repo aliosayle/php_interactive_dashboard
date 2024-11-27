@@ -111,13 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                                       </button>";
                                                 echo "</form>";
 
-                                                // Delete Button with direct link to delete_company.php
-                                                echo "<form method='GET' action='delete_company.php' style='display:inline-block;'>";
-                                                echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
-                                                echo "<button type='submit' class='btn btn-danger btn-sm action-button' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . ">
+                                                // Delete Button with SweetAlert
+                                                echo "<button type='button' class='btn btn-danger btn-sm action-button sa-warning' data-id='" . htmlspecialchars($row['id']) . "' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . ">
                                                         <i class='mdi mdi-trash-can d-block font-size-16'></i> Delete
                                                       </button>";
-                                                echo "</form>";
 
                                                 echo "</td>";
                                                 echo "</tr>";
@@ -157,6 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
 <script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
 <script src="assets/js/pages/dashboard.init.js"></script>
 <script src="assets/js/app.js"></script>
+<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -165,6 +163,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
             "paging": true,
             "info": true,
             "responsive": true
+        });
+
+        // SweetAlert for delete button
+        $('.sa-warning').on('click', function () {
+            var companyId = $(this).data('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'delete_company.php?id=' + companyId;
+                }
+            })
         });
     });
 </script>
