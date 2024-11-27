@@ -18,18 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
     $insert_query = "INSERT INTO companies (company_name) VALUES ('$company_name')";
 
     if (mysqli_query($link, $insert_query)) {
-        // Success response
-        $response['status'] = 'success';
-        $response['message'] = 'New company added successfully.';
+        // Success message
+        $success_message = 'New company added successfully.';
+        header('Location: companies.php'); // Redirect after successful addition
+        exit;
     } else {
-        // Error response
-        $response['status'] = 'error';
-        $response['message'] = 'Error adding company: ' . mysqli_error($link);
+        // Error message
+        $error_message = 'Error adding company: ' . mysqli_error($link);
     }
-
-    // Return the response as JSON
-    echo json_encode($response);
-    exit;
 }
 ?>
 
@@ -45,30 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- Add CSS to center the alert message -->
-    <style>
-        #alert-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            width: 50%;
-            min-width: 300px;
-        }
-
-        .alert {
-            padding: 20px;
-            font-size: 16px;
-            max-width: 100%;
-        }
-    </style>
 </head>
 
 <body>
-
     <?php include 'layouts/body.php'; ?>
 
     <div id="layout-wrapper">
@@ -77,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
-                    
+
                     <!-- Breadcrumb -->
                     <div class="row">
                         <div class="col-12">
@@ -98,8 +73,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                                     <h4 class="card-title">Add New Company</h4>
                                 </div>
                                 <div class="card-body">
+                                    <!-- Display Success or Error Messages -->
+                                    <?php if (isset($success_message)): ?>
+                                        <div class="alert alert-success"><?= htmlspecialchars($success_message) ?></div>
+                                    <?php elseif (isset($error_message)): ?>
+                                        <div class="alert alert-danger"><?= htmlspecialchars($error_message) ?></div>
+                                    <?php endif; ?>
+
                                     <!-- Form to add new company -->
-                                    <form id="add-company-form" method="POST" action="">
+                                    <form method="POST" action="">
                                         <div class="form-group mb-3 row">
                                             <div class="col-md-8">
                                                 <label for="company_name">Company Name</label>
@@ -110,77 +92,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                                             </div>
                                         </div>
                                     </form>
-
-                                    <!-- Container to display the alert -->
-                                    <div id="alert-container" class="mt-3"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
 
         <?php include 'layouts/footer.php'; ?>
     </div>
-</div>
 
-<?php include 'layouts/vendor-scripts.php'; ?>
-
-<script src="assets/js/app.js"></script>
-
-<!-- jQuery and Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#add-company-form').on('submit', function (e) {
-            e.preventDefault();
-            const formData = $(this).serialize();
-            $.ajax({
-                type: 'POST',
-                url: '',
-                data: formData,
-                dataType: 'json',
-                success: function (response) {
-                    let alertBox;
-                    if (response.status === 'success') {
-                        alertBox = `<div class="col-sm-12">
-                                        <div class="alert alert-success alert-dismissible fade show px-4 mb-0 text-center" role="alert">
-                                            <i class="mdi mdi-check-circle-outline d-block display-4 mt-2 mb-3 text-success"></i>
-                                            <h5 class="text-success">Success</h5>
-                                            <p>${response.message}</p>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </div>`;
-                    } else {
-                        alertBox = `<div class="col-sm-12">
-                                        <div class="alert alert-danger alert-dismissible fade show px-4 mb-0 text-center" role="alert">
-                                            <i class="mdi mdi-block-helper d-block display-4 mt-2 mb-3 text-danger"></i>
-                                            <h5 class="text-danger">Error</h5>
-                                            <p>${response.message}</p>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </div>`;
-                    }
-                    $('#alert-container').html(alertBox);
-                },
-                error: function () {
-                    const alertBox = `<div class="col-sm-12">
-                                        <div class="alert alert-danger alert-dismissible fade show px-4 mb-0 text-center" role="alert">
-                                            <i class="mdi mdi-block-helper d-block display-4 mt-2 mb-3 text-danger"></i>
-                                            <h5 class="text-danger">Error</h5>
-                                            <p>An error occurred while processing your request.</p>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </div>`;
-                    $('#alert-container').html(alertBox);
-                }
-            });
-        });
-    });
-</script>
-
+    <?php include 'layouts/vendor-scripts.php'; ?>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

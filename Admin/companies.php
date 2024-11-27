@@ -222,15 +222,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
     });
 </script>
 
-<style>
-    .action-button {
-        padding: 5px 10px; /* Add some padding for better spacing */
-        white-space: nowrap; /* Prevent text wrapping */
-        max-width: 80px; /* Limit maximum width if needed */
-        text-align: center; /* Center the content */
-        margin-left: 7px;
-    }
-</style>
+<link rel="stylesheet" href="styles.css">
+
 
 </body>
 </html>
