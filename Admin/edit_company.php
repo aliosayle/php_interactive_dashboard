@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,10 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
 
     <!-- DataTables -->
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
+    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Include FontAwesome CDN for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -66,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
             margin-left: 10px;
         }
     </style>
-
 </head>
 
 <body>
@@ -83,10 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
                         <div class="col-12">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="dashboard.php"
-                                            class="breadcrumb-link">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="companies.php"
-                                            class="breadcrumb-link">Companies</a></li>
+                                    <li class="breadcrumb-item"><a href="dashboard.php" class="breadcrumb-link">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="companies.php" class="breadcrumb-link">Companies</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Edit Company</li>
                                 </ol>
                             </nav>
@@ -101,68 +97,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
                                 </div>
                                 <div class="card-body">
                                     <!-- Form to edit company name -->
-                                    <form id="edit-company-form" method="POST" action="" class="d-flex w-100"> 
+                                    <form id="edit-company-form" method="POST" action="" class="d-flex flex-column w-100"> 
                                         <input type="hidden" name="company_id" id="company_id"
                                             value="<?php echo htmlspecialchars($_POST['company_id'] ?? ''); ?>">
-                                        <!-- Textbox takes up 9/12 of the width with some space for padding -->
-                                        <div class="form-group mb-0 w-75 pr-2"> 
-                                            <label for="company_name" class="sr-only">Company Name</label> 
-                                            <input type="text" name="company_name" id="company_name" 
-                                                class="form-control w-100"
-                                                value="<?php echo htmlspecialchars($_POST['company_name'] ?? ''); ?>"
-                                                required> 
+                                        <div class="d-flex align-items-center mb-3 w-100"> 
+                                            <div class="form-group w-75 mr-2">
+                                                <label for="company_name" class="sr-only">Company Name</label> 
+                                                <input type="text" name="company_name" id="company_name" 
+                                                    class="form-control w-100"
+                                                    value="<?php echo htmlspecialchars($_POST['company_name'] ?? ''); ?>"
+                                                    required> 
+                                            </div>
+                                            <!-- Buttons container -->
+                                            <button type="button" id="cancel-btn" 
+                                                class="btn btn-secondary btn-sm waves-effect waves-light mr-2">Cancel
+                                            </button>
+                                            <button type="button" id="sa-params" 
+                                                class="btn btn-primary btn-sm waves-effect waves-light">Confirm
+                                            </button>
                                         </div>
-                                        <!-- Button takes up 3/12 of the width with some margin on the left --> 
-                                        <button type="button" id="sa-params" 
-                                            class="btn btn-primary btn-sm waves-effect waves-light w-25"> Edit Name
-                                        </button>
                                     </form>
 
                                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                     <script>
-                                        document.addEventListener('DOMContentLoaded', (event) => {
-                                            const form = document.getElementById('edit-company-form');
-                                            const companyNameInput = document.getElementById('company_name');
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const form = document.getElementById('edit-company-form');
+        const companyNameInput = document.getElementById('company_name');
+        const cancelButton = document.getElementById('cancel-btn');
 
-                                            const showAlert = () => {
-                                                const companyName = companyNameInput.value;
+        const confirmUpdate = () => {
+            const companyName = companyNameInput.value;
 
-                                                if (companyName.trim() === "") {
-                                                    Swal.fire({
-                                                        icon: 'error',
-                                                        title: 'Oops...',
-                                                        text: 'Company name cannot be empty!',
-                                                    });
-                                                    return false;
-                                                }
+            if (companyName.trim() === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Company name cannot be empty!',
+                });
+                return false;
+            }
 
-                                                Swal.fire({
-                                                    title: 'Are you sure?',
-                                                    text: "You are about to update the company name.",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#3085d6',
-                                                    cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'Yes, update it!'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        form.submit();
-                                                    }
-                                                });
+            form.submit(); // Directly submit the form
+        };
 
-                                                return false; // Prevent the form from submitting immediately
-                                            };
+        document.getElementById('sa-params').addEventListener('click', confirmUpdate);
 
-                                            document.getElementById('sa-params').addEventListener('click', showAlert);
+        form.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent the default form submission
+                confirmUpdate();
+            }
+        });
 
-                                            form.addEventListener('keydown', (event) => {
-                                                if (event.key === 'Enter') {
-                                                    event.preventDefault(); // Prevent the default form submission
-                                                    showAlert();
-                                                }
-                                            });
-                                        });
-                                    </script>
+        cancelButton.addEventListener('click', () => {
+            const companyName = companyNameInput.value;
+
+            if (companyName.trim() !== "") {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You will lose any unsaved changes.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, cancel!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'companies.php';
+                    }
+                });
+            } else {
+                window.location.href = 'companies.php';
+            }
+        });
+    });
+</script>
 
                                     <!-- Feedback message container -->
                                     <?php if ($response_message): ?>
