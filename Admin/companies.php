@@ -6,6 +6,40 @@ include 'layouts/session.php';
 include 'layouts/head-main.php';
 include 'layouts/config.php';
 
+// Define translation array
+$translations = [
+    'en' => [
+        'dashboard' => 'Dashboard',
+        'companies' => 'Companies',
+        'companies_table' => 'Companies Table',
+        'add_new_company' => 'Add New Company',
+        'auto_number' => 'Auto Number',
+        'company_name' => 'Company Name',
+        'actions' => 'Actions',
+        'no_data_found' => 'No data found'
+    ],
+    'fr' => [
+        'dashboard' => 'Tableau de bord',
+        'companies' => 'Entreprises',
+        'companies_table' => 'Tableau des entreprises',
+        'add_new_company' => 'Ajouter une nouvelle entreprise',
+        'auto_number' => 'Numéro automatique',
+        'company_name' => 'Nom de l\'entreprise',
+        'actions' => 'Actions',
+        'no_data_found' => 'Aucune donnée trouvée'
+    ]
+];
+
+// Set the default language
+$lang = isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'fr']) ? $_GET['lang'] : 'en';
+
+// Replace text based on the selected language
+function translate($key, $lang) {
+    global $translations;
+    return $translations[$lang][$key] ?? $translations['en'][$key]; // Fallback to English if key is not found
+}
+
+
 if (!$link) {
     die("Connection not established: " . mysqli_connect_error());
 }
@@ -68,27 +102,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                     <div class="col-12">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-3">
-                                <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Companies</li>
+                                <li class="breadcrumb-item"><a href="index.php"><?php echo translate('dashboard', $lang); ?></a></li>
+                                <li class="breadcrumb-item active" aria-current="page"><?php echo translate('companies', $lang); ?></li>
                             </ol>
                         </nav>
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h4 class="card-title">Companies Table</h4>
+                                <h4 class="card-title"><?php echo translate('companies_table', $lang); ?></h4>
                             </div>
                             <div class="card-body">
                                 <form method="POST" action="add_company.php" class="mb-4">
                                     <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0) echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
-                                        <i class="fas fa-plus me-2"></i> Add New Company
+                                        <i class="fas fa-plus me-2"></i> <?php echo translate('add_new_company', $lang); ?>
                                     </button>
                                 </form>
 
                                 <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
-                                            <th>Auto Number</th>
-                                            <th>Company Name</th>
-                                            <th>Actions</th>
+                                            <th><?php echo translate('auto_number', $lang); ?></th>
+                                            <th><?php echo translate('company_name', $lang); ?></th>
+                                            <th><?php echo translate('actions', $lang); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -122,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                                 echo "</tr>";
                                             }
                                         } else {
-                                            echo "<tr><td colspan='3'>No data found</td></tr>";
+                                            echo "<tr><td colspan='3'>" . translate('no_data_found', $lang) . "</td></tr>";
                                         }
                                         ?>
                                     </tbody>
@@ -134,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
             </div>
         </div>
     </div>
+</div>
 
     <?php include 'layouts/footer.php'; ?>
 </div>
@@ -196,8 +231,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
         margin-left: 7px;
     }
 </style>
-
-
 
 </body>
 </html>
