@@ -154,6 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_id'], $_POST['si
         const form = document.getElementById('edit-site-form');
         const siteNameInput = document.getElementById('site_name');
         const cancelButton = document.getElementById('cancel-btn');
+        const breadcrumbLink = document.querySelector('.breadcrumb-item a[href="sites.php"]'); // The breadcrumb link to 'sites.php'
 
         let isUnsaved = false; // Track if there are unsaved changes
 
@@ -210,6 +211,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_id'], $_POST['si
             }
         });
 
+        // Intercept breadcrumb link click for sites.php
+        if (breadcrumbLink) {
+            breadcrumbLink.addEventListener('click', (event) => {
+                const siteName = siteNameInput.value;
+
+                if (siteName.trim() !== "") {
+                    // If there are unsaved changes, show the SweetAlert confirmation
+                    isUnsaved = true;
+                    event.preventDefault(); // Prevent the default navigation
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You will lose any unsaved changes.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, go to sites!',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // If confirmed, navigate to sites.php
+                            window.location.href = event.target.href;
+                        }
+                    });
+                }
+            });
+        }
+
         // Intercept page unload event with SweetAlert for unsaved changes
         window.addEventListener('beforeunload', (event) => {
             const siteName = siteNameInput.value;
@@ -238,6 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_id'], $_POST['si
         });
     });
 </script>
+
 
                                     <!-- Feedback message container -->
                                     <?php if ($response_message): ?>
