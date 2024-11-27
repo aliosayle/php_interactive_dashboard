@@ -21,6 +21,13 @@ $permission_query = "SELECT canedit FROM users WHERE id = '$user_id'";
 $permission_result = mysqli_query($link, $permission_query);
 $permissions = mysqli_fetch_assoc($permission_result);
 
+if ($permissions['canedit'] != 1) {
+    header('Location: companies.php');
+    exit();  // It's a good practice to call exit() after a redirect
+}
+
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST['company_name'])) {
     if ($permissions['canedit'] != 1) {
         die("You do not have permission to edit company names.");
@@ -52,8 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
 
     <!-- DataTables -->
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
 
     <!-- Include FontAwesome CDN for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -68,19 +77,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
 
         .form-group {
             margin-bottom: 0;
-            width: calc(100% - 220px); /* Adjusts the input width to leave space for buttons */
+            width: calc(100% - 220px);
+            /* Adjusts the input width to leave space for buttons */
         }
 
         .form-control {
-            width: 100%; /* Ensures the input takes the full width of its container */
+            width: 100%;
+            /* Ensures the input takes the full width of its container */
         }
 
         .btn {
-            margin: 0 5px; /* Adds equal margin on both sides of the buttons */
+            margin: 0 5px;
+            /* Adds equal margin on both sides of the buttons */
         }
 
         .btn-secondary {
-            margin-right: 10px; /* Optional, in case you want more space between Cancel and Confirm */
+            margin-right: 10px;
+            /* Optional, in case you want more space between Cancel and Confirm */
         }
     </style>
 </head>
@@ -99,8 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
                         <div class="col-12">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="dashboard.php" class="breadcrumb-link">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="companies.php" class="breadcrumb-link">Companies</a></li>
+                                    <li class="breadcrumb-item"><a href="dashboard.php"
+                                            class="breadcrumb-link">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="companies.php"
+                                            class="breadcrumb-link">Companies</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Edit Company</li>
                                 </ol>
                             </nav>
@@ -115,75 +130,124 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
                                 </div>
                                 <div class="card-body">
                                     <!-- Form to edit company name -->
-                                    <form id="edit-company-form" method="POST" action="" class="d-flex align-items-center w-100">
-                                        <input type="hidden" name="company_id" id="company_id" value="<?php echo htmlspecialchars($_POST['company_id'] ?? ''); ?>">
+                                    <form id="edit-company-form" method="POST" action=""
+                                        class="d-flex align-items-center w-100">
+                                        <input type="hidden" name="company_id" id="company_id"
+                                            value="<?php echo htmlspecialchars($_POST['company_id'] ?? ''); ?>">
                                         <div class="form-group">
                                             <label for="company_name" class="sr-only">Company Name</label>
-                                            <input type="text" name="company_name" id="company_name" class="form-control" value="<?php echo htmlspecialchars($_POST['company_name'] ?? ''); ?>" required>
+                                            <input type="text" name="company_name" id="company_name"
+                                                class="form-control"
+                                                value="<?php echo htmlspecialchars($_POST['company_name'] ?? ''); ?>"
+                                                required>
                                         </div>
                                         <!-- Buttons container -->
-                                        <button type="button" id="cancel-btn" class="btn btn-secondary btn-sm waves-effect waves-light">Cancel</button>
-                                        <button type="button" id="sa-params" class="btn btn-primary btn-sm waves-effect waves-light">Confirm</button>
+                                        <button type="button" id="cancel-btn"
+                                            class="btn btn-secondary btn-sm waves-effect waves-light">Cancel</button>
+                                        <button type="button" id="sa-params"
+                                            class="btn btn-primary btn-sm waves-effect waves-light">Confirm</button>
                                     </form>
-
                                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                     <script>
-                                        document.addEventListener('DOMContentLoaded', (event) => {
-                                            const form = document.getElementById('edit-company-form');
-                                            const companyNameInput = document.getElementById('company_name');
-                                            const cancelButton = document.getElementById('cancel-btn');
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const form = document.getElementById('edit-company-form');
+        const companyNameInput = document.getElementById('company_name');
+        const cancelButton = document.getElementById('cancel-btn');
 
-                                            const confirmUpdate = () => {
-                                                const companyName = companyNameInput.value;
+        let isUnsaved = false; // Track if there are unsaved changes
 
-                                                if (companyName.trim() === "") {
-                                                    Swal.fire({
-                                                        icon: 'error',
-                                                        title: 'Oops...',
-                                                        text: 'Company name cannot be empty!',
-                                                    });
-                                                    return false;
-                                                }
+        // Handle the "Save Changes" button click
+        const confirmUpdate = () => {
+            const companyName = companyNameInput.value;
 
-                                                form.submit(); // Directly submit the form
-                                            };
+            if (companyName.trim() === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Company name cannot be empty!',
+                });
+                return false;
+            }
 
-                                            document.getElementById('sa-params').addEventListener('click', confirmUpdate);
+            isUnsaved = false; // Reset unsaved changes flag
+            form.submit(); // Directly submit the form
+        };
 
-                                            form.addEventListener('keydown', (event) => {
-                                                if (event.key === 'Enter') {
-                                                    event.preventDefault(); // Prevent the default form submission
-                                                    confirmUpdate();
-                                                }
-                                            });
+        document.getElementById('sa-params').addEventListener('click', confirmUpdate);
 
-                                            cancelButton.addEventListener('click', () => {
-                                                const companyName = companyNameInput.value;
+        form.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent the default form submission
+                confirmUpdate();
+            }
+        });
 
-                                                if (companyName.trim() !== "") {
-                                                    Swal.fire({
-                                                        title: 'Are you sure?',
-                                                        text: "You will lose any unsaved changes.",
-                                                        icon: 'warning',
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: '#3085d6',
-                                                        cancelButtonColor: '#d33',
-                                                        confirmButtonText: 'Yes, cancel!'
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            window.location.href = 'companies.php';
-                                                        }
-                                                    });
-                                                } else {
-                                                    window.location.href = 'companies.php';
-                                                }
-                                            });
-                                        });
-                                    </script>
+        // Handle the cancel button click (navigate to companies.php)
+        cancelButton.addEventListener('click', () => {
+            const companyName = companyNameInput.value;
+
+            if (companyName.trim() !== "") {
+                // If there are unsaved changes, show the SweetAlert confirmation
+                isUnsaved = true;
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You will lose any unsaved changes.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, cancel!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If confirmed, navigate to companies.php
+                        window.location.href = 'companies.php';
+                    }
+                });
+            } else {
+                // If no unsaved changes, navigate directly
+                window.location.href = 'companies.php';
+            }
+        });
+
+        // Intercept page unload event with SweetAlert for unsaved changes
+        window.addEventListener('beforeunload', (event) => {
+            const companyName = companyNameInput.value;
+
+            if (companyName.trim() !== "" && !isUnsaved) {
+                // Prevent the default browser alert
+                event.preventDefault();
+
+                // Show custom SweetAlert for unsaved changes confirmation
+                Swal.fire({
+                    title: 'You have unsaved changes.',
+                    text: 'Are you sure you want to leave?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, leave',
+                    cancelButtonText: 'No, stay'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If user confirms, allow navigation (reload or navigate)
+                        window.location.href = event.target.URL;
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
 
                                     <!-- Feedback message container -->
                                     <?php if ($response_message): ?>
-                                        <p id="response-message" style="font-weight: bold; margin-top: 10px; color: <?php echo $response_color; ?>;">
+                                        <p id="response-message"
+                                            style="font-weight: bold; margin-top: 10px; color: <?php echo $response_color; ?>;">
                                             <?php echo $response_message; ?>
                                         </p>
                                     <?php endif; ?>
