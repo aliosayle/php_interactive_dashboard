@@ -2,142 +2,172 @@
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
 include 'layouts/session.php';
 include 'layouts/head-main.php';
 include 'layouts/config.php';
+
+// Define translation array
+$translations = [
+    'en' => [
+        'dashboard' => 'Dashboard',
+        'sites' => 'Sites',
+        'sites_table' => 'Sites Table',
+        'add_new_site' => 'Add New Site',
+        'auto_number' => 'Auto Number',
+        'site_name' => 'Site Name',
+        'actions' => 'Actions',
+        'no_data_found' => 'No data found'
+    ],
+    'fr' => [
+        'dashboard' => 'Tableau de bord',
+        'sites' => 'Sites',
+        'sites_table' => 'Tableau des sites',
+        'add_new_site' => 'Ajouter un nouveau site',
+        'auto_number' => 'Numéro automatique',
+        'site_name' => 'Nom du site',
+        'actions' => 'Actions',
+        'no_data_found' => 'Aucune donnée trouvée'
+    ]
+];
+
+// Set the default language
+$lang = isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'fr']) ? $_GET['lang'] : 'en';
+
+// Replace text based on the selected language
+function translate($key, $lang)
+{
+    global $translations;
+    return $translations[$lang][$key] ?? $translations['en'][$key]; // Fallback to English if key is not found
+}
 
 if (!$link) {
     die("Connection not established: " . mysqli_connect_error());
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['site_name'])) {
-    // Add new site to the database
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (isset($_SESSION['delete_message'])) {
+    $alert_type = strpos($_SESSION['delete_message'], 'successfully') !== false ? 'success' : 'danger';
+    echo "<div class='alert alert-$alert_type alert-dismissible fade show' role='alert'>" . htmlspecialchars($_SESSION['delete_message']) . "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
+    unset($_SESSION['delete_message']); // Unset after displaying the message
+}
+
+// Fetch user permissions
+$user_id = $_SESSION['id']; // Assuming user_id is stored in session
+$permission_query = "SELECT canedit, candelete, canadd FROM users WHERE id = '$user_id'";
+$permission_result = mysqli_query($link, $permission_query);
+$permissions = mysqli_fetch_assoc($permission_result);
+
+// Protect POST actions with permission checks
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name']) && $permissions['canadd'] == 1) {
     $site_name = mysqli_real_escape_string($link, $_POST['site_name']);
     $insert_query = "INSERT INTO sites (site_name) VALUES ('$site_name')";
-    
     if (mysqli_query($link, $insert_query)) {
-        echo "<script>alert('New site added successfully'); window.location.href = 'current_page.php';</script>";
+        echo "<script>alert('New site added successfully');</script>";
     } else {
-        echo "Error: " . mysqli_error($link);
+        echo "<script>alert('Error adding site: " . mysqli_error($link) . "');</script>";
     }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo "<script>alert('You do not have permission to add sites.');</script>";
 }
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <title>DataTables | Minia - Admin & Dashboard Template</title>
+    <title>Sites Table | Admin Template</title>
     <?php include 'layouts/head.php'; ?>
-
-    <!-- DataTables -->
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- Responsive datatable examples -->
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-
+    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <?php include 'layouts/head-style.php'; ?>
 </head>
 
-<?php include 'layouts/body.php'; ?>
+<body>
+    <?php include 'layouts/body.php'; ?>
 
-<div id="layout-wrapper">
-    <?php include 'layouts/menu.php'; ?>
-
-    <div class="main-content">
-    <div class="page-content">
-        <div class="container-fluid">
-            <!-- Breadcrumb -->
-            <div class="row">
-                <div class="col-12">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="sites.php">Sites</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Current Page</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-            <!-- End of Breadcrumb -->
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Sites Table</h4>
-                            <!-- Button to open the form -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSiteModal" href="add_site.php">Add Site</button>
-                        </div>
-
-                        <!-- Modal for adding new site -->
-                        <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Add New Site</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+    <div id="layout-wrapper">
+        <?php include 'layouts/menu.php'; ?>
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-3">
+                                    <li class="breadcrumb-item"><a
+                                            href="index.php"><?php echo translate('dashboard', $lang); ?></a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        <?php echo translate('sites', $lang); ?></li>
+                                </ol>
+                            </nav>
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title"><?php echo translate('sites_table', $lang); ?></h4>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="add_site.php" class="mb-4">
+                                        <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0)
+                                            echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
+                                            <i class="fas fa-plus me-2"></i>
+                                            <?php echo translate('add_new_site', $lang); ?>
                                         </button>
-                                    </div>
-                                    <form method="POST" action="current_page.php">
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <label for="site_name">Site Name</label>
-                                                <input type="text" class="form-control" id="site_name" name="site_name" required>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Add Site</button>
-                                        </div>
                                     </form>
+
+                                    <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                                        <thead>
+                                            <tr>
+                                                <th><?php echo translate('auto_number', $lang); ?></th>
+                                                <th><?php echo translate('site_name', $lang); ?></th>
+                                                <th><?php echo translate('actions', $lang); ?></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $query = "SELECT id, autonumber, site_name FROM sites";
+                                            $result = mysqli_query($link, $query);
+                                            if (!$result) {
+                                                die("Query failed: " . mysqli_error($link));
+                                            }
+                                            if (mysqli_num_rows($result) > 0) {
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<tr>";
+                                                    echo "<td>" . htmlspecialchars($row['autonumber']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($row['site_name']) . "</td>";
+                                                    echo "<td class='text-center'>";
+
+                                                    // Edit Button
+                                                    echo "<form method='POST' action='edit_site.php' style='display:inline-block;'>";
+                                                    echo "<input type='hidden' name='site_id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                    echo "<button type='submit' class='btn btn-success btn-sm action-button' " . ($permissions['canedit'] == 0 ? 'style="pointer-events: none; opacity: 0.6;"' : '') . ">
+                                                        <i class='mdi mdi-pencil d-block font-size-16'></i>
+                                                      </button>";
+                                                    echo "</form>";
+
+                                                    // Delete Button with SweetAlert
+                                                    echo "<button type='button' class='btn btn-danger btn-sm action-button sa-warning' data-id='" . htmlspecialchars($row['id']) . "' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . ">
+                                                        <i class='mdi mdi-trash-can d-block font-size-16'></i>
+                                                      </button>";
+
+                                                    echo "</td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='3'>" . translate('no_data_found', $lang) . "</td></tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="card-body">
-                            <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Site Name</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    // Debugging connection state
-                                    if (!$link) {
-                                        die("Database connection error: " . mysqli_connect_error());
-                                    }
-
-                                    // Fetch data
-                                    $query = "SELECT id, site_name FROM sites";
-                                    $result = mysqli_query($link, $query);
-
-                                    // Check if the query executed successfully
-                                    if (!$result) {
-                                        die("Query failed: " . mysqli_error($link));
-                                    }
-
-                                    // Populate table rows
-                                    if (mysqli_num_rows($result) > 0) {
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<tr>";
-                                            echo "<td>" . htmlspecialchars($row['id']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($row['site_name']) . "</td>";
-                                            echo "<td>
-                                                    <a href='edit_site.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>Edit</a>
-                                                    <a href='delete_site.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this site?\")'>Delete</a>
-                                                  </td>"; // Edit and Delete buttons
-                                            echo "</tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='3'>No data found</td></tr>"; // Updated colspan for 3 columns
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -145,37 +175,80 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['site_name'])) {
         </div>
     </div>
 
-
-        <?php include 'layouts/footer.php'; ?>
+    <?php include 'layouts/footer.php'; ?>
     </div>
-</div>
 
-<!-- Include JavaScript files -->
-<?php include 'layouts/vendor-scripts.php'; ?>
-<script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-<script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-<script src="assets/libs/jszip/jszip.min.js"></script>
-<script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
-<script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
-<script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
-<script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
-<script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <?php include 'layouts/vendor-scripts.php'; ?>
 
-<script>
-    // Initialize DataTable with search enabled
-    $(document).ready(function() {
-        $('#datatable').DataTable({
-            "searching": true, // Enable search functionality
-            "paging": true,    // Enable pagination
-            "info": true,      // Show table info
-            "responsive": true // Enable responsive design
+    <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="assets/libs/jszip/jszip.min.js"></script>
+    <script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="assets/js/pages/dashboard.init.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+    $(document).on('click', '.sa-warning', function (e) {
+        var siteId = $(this).data('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'delete_site.php',
+                    type: 'POST',
+                    data: { site_id: siteId },
+                    success: function (response) {
+                        if (response === 'success') {
+                            Swal.fire('Deleted!', 'Your record has been deleted.', 'success').then(function () {
+                                // Reload the page after the success message
+                                location.reload();
+                            });
+                        } 
+                    },
+                    complete: function() {
+                        // Ensure page reload after any AJAX call ends (in case of failure as well)
+                        location.reload();
+                    }
+                });
+            }
         });
     });
 </script>
 
-<script src="assets/js/app.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#datatable').DataTable({
+            "searching": true,  // Enable searching
+            "paging": true,     // Enable pagination
+            "info": true,       // Show info text (e.g., "Showing 1 to 10 of 50 entries")
+            "responsive": true  // Make the table responsive
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="styles.css">
+
 </body>
+
 </html>
