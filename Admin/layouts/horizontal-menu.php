@@ -60,18 +60,10 @@
                     <?php if ($lang == 'en') { ?>
                         <img class="me-2" src="assets/images/flags/us.jpg" alt="Header Language" height="16">
                     <?php } ?>
-                    <?php if ($lang == 'es') { ?>
+                    <?php if ($lang == 'fr') { ?>
                         <img class="me-2" src="assets/images/flags/spain.jpg" alt="Header Language" height="16">
                     <?php } ?>
-                    <?php if ($lang == 'de') { ?>
-                        <img class="me-2" src="assets/images/flags/germany.jpg" alt="Header Language" height="16">
-                    <?php } ?>
-                    <?php if ($lang == 'it') { ?>
-                        <img class="me-2" src="assets/images/flags/italy.jpg" alt="Header Language" height="16">
-                    <?php } ?>
-                    <?php if ($lang == 'ru') { ?>
-                        <img class="me-2" src="assets/images/flags/russia.jpg" alt="Header Language" height="16">
-                    <?php } ?>
+
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
 

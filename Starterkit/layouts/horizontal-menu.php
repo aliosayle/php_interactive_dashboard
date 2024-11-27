@@ -60,18 +60,10 @@
                     <?php if ($lang == 'en') { ?>
                         <img class="me-2" src="assets/images/flags/us.jpg" alt="Header Language" height="16">
                     <?php } ?>
-                    <?php if ($lang == 'es') { ?>
-                        <img class="me-2" src="assets/images/flags/spain.jpg" alt="Header Language" height="16">
+                    <?php if ($lang == 'fr') { ?>
+                        <img class="me-2" src="assets/images/flags/fr.jpg" alt="Header Language" height="16">
                     <?php } ?>
-                    <?php if ($lang == 'de') { ?>
-                        <img class="me-2" src="assets/images/flags/germany.jpg" alt="Header Language" height="16">
-                    <?php } ?>
-                    <?php if ($lang == 'it') { ?>
-                        <img class="me-2" src="assets/images/flags/italy.jpg" alt="Header Language" height="16">
-                    <?php } ?>
-                    <?php if ($lang == 'ru') { ?>
-                        <img class="me-2" src="assets/images/flags/russia.jpg" alt="Header Language" height="16">
-                    <?php } ?>
+
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
 
@@ -82,22 +74,7 @@
                     
                     <!-- item-->
                     <a href="?lang=de" class="dropdown-item notify-item">
-                        <img src="assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle"> German </span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="?lang=it" class="dropdown-item notify-item">
-                        <img src="assets/images/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle"> Italian </span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="?lang=es" class="dropdown-item notify-item">
-                        <img src="assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle"> Spanish </span>
-                    </a>
-
-                     <!-- item-->
-                     <a href="?lang=ru" class="dropdown-item notify-item">
-                        <img src="assets/images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle"> Russian </span>
+                        <img src="assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle"> French </span>
                     </a>
 
                 </div>
