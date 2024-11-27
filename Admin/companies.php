@@ -193,6 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
         white-space: nowrap; /* Prevent text wrapping */
         max-width: 80px; /* Limit maximum width if needed */
         text-align: center; /* Center the content */
+        margin-left: 7px;
     }
 </style>
 

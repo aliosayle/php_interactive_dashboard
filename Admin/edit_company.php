@@ -61,8 +61,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        #sa-params {
-            margin-left: 10px;
+        .d-flex {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+            width: calc(100% - 220px); /* Adjusts the input width to leave space for buttons */
+        }
+
+        .form-control {
+            width: 100%; /* Ensures the input takes the full width of its container */
+        }
+
+        .btn {
+            margin: 0 5px; /* Adds equal margin on both sides of the buttons */
+        }
+
+        .btn-secondary {
+            margin-right: 10px; /* Optional, in case you want more space between Cancel and Confirm */
         }
     </style>
 </head>
@@ -97,86 +115,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
                                 </div>
                                 <div class="card-body">
                                     <!-- Form to edit company name -->
-                                    <form id="edit-company-form" method="POST" action="" class="d-flex flex-column w-100"> 
-                                        <input type="hidden" name="company_id" id="company_id"
-                                            value="<?php echo htmlspecialchars($_POST['company_id'] ?? ''); ?>">
-                                        <div class="d-flex align-items-center mb-3 w-100"> 
-                                            <div class="form-group w-75 mr-2">
-                                                <label for="company_name" class="sr-only">Company Name</label> 
-                                                <input type="text" name="company_name" id="company_name" 
-                                                    class="form-control w-100"
-                                                    value="<?php echo htmlspecialchars($_POST['company_name'] ?? ''); ?>"
-                                                    required> 
-                                            </div>
-                                            <!-- Buttons container -->
-                                            <button type="button" id="cancel-btn" 
-                                                class="btn btn-secondary btn-sm waves-effect waves-light mr-2">Cancel
-                                            </button>
-                                            <button type="button" id="sa-params" 
-                                                class="btn btn-primary btn-sm waves-effect waves-light">Confirm
-                                            </button>
+                                    <form id="edit-company-form" method="POST" action="" class="d-flex align-items-center w-100">
+                                        <input type="hidden" name="company_id" id="company_id" value="<?php echo htmlspecialchars($_POST['company_id'] ?? ''); ?>">
+                                        <div class="form-group">
+                                            <label for="company_name" class="sr-only">Company Name</label>
+                                            <input type="text" name="company_name" id="company_name" class="form-control" value="<?php echo htmlspecialchars($_POST['company_name'] ?? ''); ?>" required>
                                         </div>
+                                        <!-- Buttons container -->
+                                        <button type="button" id="cancel-btn" class="btn btn-secondary btn-sm waves-effect waves-light">Cancel</button>
+                                        <button type="button" id="sa-params" class="btn btn-primary btn-sm waves-effect waves-light">Confirm</button>
                                     </form>
 
                                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                     <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const form = document.getElementById('edit-company-form');
-        const companyNameInput = document.getElementById('company_name');
-        const cancelButton = document.getElementById('cancel-btn');
+                                        document.addEventListener('DOMContentLoaded', (event) => {
+                                            const form = document.getElementById('edit-company-form');
+                                            const companyNameInput = document.getElementById('company_name');
+                                            const cancelButton = document.getElementById('cancel-btn');
 
-        const confirmUpdate = () => {
-            const companyName = companyNameInput.value;
+                                            const confirmUpdate = () => {
+                                                const companyName = companyNameInput.value;
 
-            if (companyName.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Company name cannot be empty!',
-                });
-                return false;
-            }
+                                                if (companyName.trim() === "") {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Oops...',
+                                                        text: 'Company name cannot be empty!',
+                                                    });
+                                                    return false;
+                                                }
 
-            form.submit(); // Directly submit the form
-        };
+                                                form.submit(); // Directly submit the form
+                                            };
 
-        document.getElementById('sa-params').addEventListener('click', confirmUpdate);
+                                            document.getElementById('sa-params').addEventListener('click', confirmUpdate);
 
-        form.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent the default form submission
-                confirmUpdate();
-            }
-        });
+                                            form.addEventListener('keydown', (event) => {
+                                                if (event.key === 'Enter') {
+                                                    event.preventDefault(); // Prevent the default form submission
+                                                    confirmUpdate();
+                                                }
+                                            });
 
-        cancelButton.addEventListener('click', () => {
-            const companyName = companyNameInput.value;
+                                            cancelButton.addEventListener('click', () => {
+                                                const companyName = companyNameInput.value;
 
-            if (companyName.trim() !== "") {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You will lose any unsaved changes.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, cancel!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'companies.php';
-                    }
-                });
-            } else {
-                window.location.href = 'companies.php';
-            }
-        });
-    });
-</script>
+                                                if (companyName.trim() !== "") {
+                                                    Swal.fire({
+                                                        title: 'Are you sure?',
+                                                        text: "You will lose any unsaved changes.",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Yes, cancel!'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            window.location.href = 'companies.php';
+                                                        }
+                                                    });
+                                                } else {
+                                                    window.location.href = 'companies.php';
+                                                }
+                                            });
+                                        });
+                                    </script>
 
                                     <!-- Feedback message container -->
                                     <?php if ($response_message): ?>
-                                        <p id="response-message"
-                                            style="font-weight: bold; margin-top: 10px; color: <?php echo $response_color; ?>;">
+                                        <p id="response-message" style="font-weight: bold; margin-top: 10px; color: <?php echo $response_color; ?>;">
                                             <?php echo $response_message; ?>
                                         </p>
                                     <?php endif; ?>
