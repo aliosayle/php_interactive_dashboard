@@ -52,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <?php include 'layouts/head-style.php'; ?>
+
+
 </head>
 
 <body>
@@ -107,13 +109,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                                 echo "<form method='POST' action='edit_company.php' style='display:inline-block;'>";
                                                 echo "<input type='hidden' name='company_id' value='" . htmlspecialchars($row['id']) . "'>";
                                                 echo "<button type='submit' class='btn btn-success btn-sm action-button' " . ($permissions['canedit'] == 0 ? 'style="pointer-events: none; opacity: 0.6;"' : '') . ">
-                                                        <i class='mdi mdi-pencil d-block font-size-16'></i> Edit
+                                                        <i class='mdi mdi-pencil d-block font-size-16'></i>
                                                       </button>";
                                                 echo "</form>";
 
                                                 // Delete Button with SweetAlert
                                                 echo "<button type='button' class='btn btn-danger btn-sm action-button sa-warning' data-id='" . htmlspecialchars($row['id']) . "' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . ">
-                                                        <i class='mdi mdi-trash-can d-block font-size-16'></i> Delete
+                                                        <i class='mdi mdi-trash-can d-block font-size-16'></i>
                                                       </button>";
 
                                                 echo "</td>";
@@ -187,10 +189,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
 
 <style>
     .action-button {
-        width: 100px; /* Keep buttons inside the table and the same size */
+        padding: 5px 10px; /* Add some padding for better spacing */
         white-space: nowrap; /* Prevent text wrapping */
+        max-width: 80px; /* Limit maximum width if needed */
+        text-align: center; /* Center the content */
     }
 </style>
+
+
 
 </body>
 </html>
