@@ -1,3 +1,6 @@
+
+
+
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 
@@ -48,7 +51,7 @@
                             </div>
                             <div class="card-body p-4">
 
-                                <form action="add_bon.php" method="POST">
+                                <form action="process_add_bon.php" method="POST">
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-3">
@@ -83,14 +86,23 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="currency_1" class="form-label">Currency 1</label>
-                                                <select class="form-select" name="currency_1" id="currency_1" required>
+                                                <label for="currency_1" class="form-label">Currency 2</label>
+                                                <select class="form-select" name="currency_1" id="currency_1">
                                                     <option value="USD">USD</option>
                                                     <option value="EUR">EUR</option>
                                                     <option value="EGP">CF</option>
                                                     <!-- Add other currencies as needed -->
                                                 </select>
                                             </div>
+
+                                            <div class="mb-3">
+                                                <label for="is_voided" class="form-label">Is Voided</label>
+                                                <select class="form-select" name="isvoided" id="isvoided" required>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+
 
                                             <div class="mb-3">
                                                 <label for="amount_2" class="form-label">Amount 2</label>
@@ -115,10 +127,11 @@
                                             <div class="mb-3">
                                                 <label for="is_voided" class="form-label">Is Voided</label>
                                                 <select class="form-select" name="isvoided" id="isvoided" required>
-                                                    <option value="USD">Yes</option>
-                                                    <option value="EUR">No</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
                                                 </select>
                                             </div>
+
 
                                             <div class="mb-3">
                                                 <label for="date" class="form-label">Transaction Date</label>
