@@ -6,3 +6,6 @@
     text-align: center; /* Center the content */
     margin-left: 7px;
 }
+.table-responsive {
+    overflow-x: auto;
+}
