@@ -43,7 +43,8 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Transaction Details</h4>
-                                <p class="card-title-desc">Please fill in the following details to create a new bon record.</p>
+                                <p class="card-title-desc">Please fill in the following details to create a new bon
+                                    record.</p>
                             </div>
                             <div class="card-body p-4">
 
@@ -52,27 +53,33 @@
                                         <div class="col-lg-6">
                                             <div class="mb-3">
                                                 <label for="reference" class="form-label">Reference</label>
-                                                <input class="form-control" type="text" name="reference" id="reference" required>
+                                                <input class="form-control" type="text" name="reference" id="reference"
+                                                    required>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="sequence_reference" class="form-label">Sequence Reference</label>
-                                                <input class="form-control" type="text" name="sequence_reference" id="sequence_reference" required>
+                                                <label for="sequence_reference" class="form-label">Sequence
+                                                    Reference</label>
+                                                <input class="form-control" type="text" name="sequence_reference"
+                                                    id="sequence_reference" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="user_id" class="form-label">User ID</label>
-                                                <input class="form-control" type="text" name="user_id" id="user_id" required>
+                                                <input class="form-control" type="text" name="user_id" id="user_id"
+                                                    required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="company_id" class="form-label">Company ID</label>
-                                                <input class="form-control" type="text" name="company_id" id="company_id" required>
+                                                <input class="form-control" type="text" name="company_id"
+                                                    id="company_id" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="amount_1" class="form-label">Amount 1</label>
-                                                <input class="form-control" type="number" step="0.01" name="amoun_1" id="amount_1" required>
+                                                <input class="form-control" type="number" step="0.01" name="amoun_1"
+                                                    id="amount_1" required>
                                             </div>
 
                                             <div class="mb-3">
@@ -87,10 +94,11 @@
 
                                             <div class="mb-3">
                                                 <label for="amount_2" class="form-label">Amount 2</label>
-                                                <input class="form-control" type="number" step="0.01" name="amount_2" id="amount_2">
+                                                <input class="form-control" type="number" step="0.01" name="amount_2"
+                                                    id="amount_2">
                                             </div>
 
- 
+
 
                                             <div class="mb-3">
                                                 <label for="currency_2" class="form-label">Currency 2</label>
@@ -121,38 +129,45 @@
                                         <div class="col-lg-6">
                                             <div class="mb-3">
                                                 <label for="user_name" class="form-label">User Name</label>
-                                                <input class="form-control" type="text" name="user_name" id="user_name" required>
+                                                <input class="form-control" type="text" name="user_name" id="user_name"
+                                                    required>
                                             </div>
 
 
                                             <div class="mb-3">
                                                 <label for="site_id" class="form-label">Site ID</label>
-                                                <input class="form-control" type="text" name="site_id" id="site_id" required>
+                                                <input class="form-control" type="text" name="site_id" id="site_id"
+                                                    required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="company_name" class="form-label">Company Name</label>
-                                                <input class="form-control" type="text" name="company_name" id="company_name" required>
+                                                <input class="form-control" type="text" name="company_name"
+                                                    id="company_name" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="description" class="form-label">Comments</label>
-                                                <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
+                                                <textarea class="form-control" name="description" id="description"
+                                                    rows="3" required></textarea>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="account_number" class="form-label">Account Number</label>
-                                                <input class="form-control" type="text" name="account_number" id="account_number" required>
+                                                <input class="form-control" type="text" name="account_number"
+                                                    id="account_number" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="motive" class="form-label">Motive</label>
-                                                <input class="form-control" type="text" name="motive" id="motive" required>
+                                                <input class="form-control" type="text" name="motive" id="motive"
+                                                    required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="paid_by" class="form-label">Beneficier Name</label>
-                                                <input class="form-control" type="text" name="paid_by" id="paid_by" required>
+                                                <input class="form-control" type="text" name="paid_by" id="paid_by"
+                                                    required>
                                             </div>
                                         </div>
                                     </div>
@@ -186,4 +201,5 @@
 <script src="assets/js/app.js"></script>
 
 </body>
+
 </html>
