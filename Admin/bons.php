@@ -28,7 +28,8 @@ $translations = [
         'comments' => 'Comments',
         'actions' => 'Actions',
         'no_data_found' => 'No data found',
-        'bons' => 'Bons'
+        'bons' => 'Bons',
+        'id' => 'id'
     ],
     'fr' => [
         'dashboard' => 'Tableau de bord',
@@ -50,7 +51,8 @@ $translations = [
         'comments' => 'Commentaires',
         'actions' => 'Actions',
         'no_data_found' => 'Aucune donnée trouvée',
-        'bons' => 'Bons'
+        'bons' => 'Bons',
+        'id' => 'id'
     ]
 ];
 
@@ -85,13 +87,13 @@ $permission_result = mysqli_query($link, $permission_query);
 $permissions = mysqli_fetch_assoc($permission_result);
 
 // Protect POST actions with permission checks
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $permissions['canadd'] == 1) {
-    $company_name = mysqli_real_escape_string($link, $_POST['company_name']);
-    $insert_query = "INSERT INTO bon (company_name) VALUES ('$company_name')";
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permissions['canadd'] == 1) {
+    $bon_name = mysqli_real_escape_string($link, $_POST['bon_name']);
+    $insert_query = "INSERT INTO bon (bon_name) VALUES ('$bon_name')";
     if (mysqli_query($link, $insert_query)) {
-        echo "<script>alert('New company added successfully');</script>";
+        echo "<script>alert('New bon added successfully');</script>";
     } else {
-        echo "<script>alert('Error adding company: " . mysqli_error($link) . "');</script>";
+        echo "<script>alert('Error adding bon: " . mysqli_error($link) . "');</script>";
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "<script>alert('You do not have permission to add Bons.');</script>";
@@ -152,6 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                         <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                                         <thead>
                                                 <tr>
+                                                    <th><?php echo translate('id', $lang); ?></th>
                                                     <th><?php echo translate('reference', $lang); ?></th>
                                                     <th><?php echo translate('beneficier_name', $lang); ?></th>
                                                     <th><?php echo translate('date_of_bon', $lang); ?></th>
@@ -178,6 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                                 if (mysqli_num_rows($result) > 0) {
                                                     while ($row = mysqli_fetch_assoc($result)) {
                                                         echo "<tr>";
+                                                        echo "<td>" . htmlspecialchars($row['id']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['reference']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['beneficier_name']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['date_of_bon']) . "</td>";
@@ -194,14 +198,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                                         echo "<td>";
 
                                                         // Edit Button
-                                                        echo "<form method='GET' action='edit_company.php' style='display:inline-block;'>";
-                                                        echo "<input type='hidden' name='company_id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                        echo "<form method='GET' action='edit_bon.php' style='display:inline-block;'>";
+                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
                                                         echo "<button type='submit' class='btn btn-sm btn-info' " . ($permissions['canedit'] == 0 ? 'disabled' : '') . ">Edit</button>";
                                                         echo "</form>";
 
                                                         // Delete Button
-                                                        echo "<form method='POST' action='delete_company.php' style='display:inline-block;'>";
-                                                        echo "<input type='hidden' name='company_id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                        echo "<form method='GET' action='delete_bon.php' style='display:inline-block;'>";
+                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                        
                                                         echo "<button type='submit' class='btn btn-sm btn-danger' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . ">Delete</button>";
                                                         echo "</form>";
 
@@ -254,24 +259,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
             "responsive": true
         });
 
-        // SweetAlert for delete button
-        $('.sa-warning').on('click', function () {
-            var bonId = $(this).data('id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'delete_bon.php?id=' + bonId;
-                }
-            })
+    // SweetAlert for delete button
+    $('.sa-warning').on('click', function () {
+        var bon_id = $(this).data('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to recover this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Proceed with the deletion if confirmed
+                $.ajax({
+                    url: 'delete_bon.php',
+                    type: 'GET',
+                    data: { bon_id: bon_id },
+                    success: function(response) {
+                        Swal.fire(
+                            'Deleted!',
+                            'The bon has been deleted.',
+                            'success'
+                        ).then(() => {
+                            location.reload(); // Reload the page after deletion
+                        });
+                    },
+                    error: function() {
+                        Swal.fire(
+                            'Error!',
+                            'There was an issue deleting the bon.',
+                            'error'
+                        );
+                    }
+                });
+            } else {
+                Swal.fire(
+                    'Cancelled',
+                    'Your bon is safe :)',
+                    'error'
+                );
+            }
         });
     });
+});
+
 
 </script>
 

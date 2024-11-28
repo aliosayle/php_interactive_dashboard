@@ -1,40 +1,58 @@
 <?php
-// Uncomment the two lines below to Enable error reporting
+// Enable error reporting for development
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 include 'layouts/session.php';
 include 'layouts/head-main.php';
-include 'layouts/config.php';
+include 'layouts/config.php'; // Ensure $link is defined here
 
-// Fetch user permissions
-$user_id = $_SESSION['id']; // Assuming user_id is stored in session
-$permission_query = "SELECT canedit, candelete, canadd FROM users WHERE id = '$user_id'";
-$permission_result = mysqli_query($link, $permission_query);
-$permissions = mysqli_fetch_assoc($permission_result);
+// Check if the user has permission to delete
+$user_id = $_SESSION['id'];
+echo "User ID: $user_id<br>"; // Debugging line
 
-// Check if the user has delete permission
-if ($permissions['candelete'] == 0) {
-    $_SESSION['delete_message'] = "You do not have permission to delete this bon.";
-    header("Location: bons.php");
-    exit;
+$permission_query = "SELECT candelete FROM users WHERE id = '$user_id'";
+echo "Permission Query: $permission_query<br>"; // Debugging line
+$result = mysqli_query($link, $permission_query);
+
+if (!$result) {
+    echo "Error in querying user permissions: " . mysqli_error($link) . "<br>";
+    exit();
 }
 
-if (isset($_POST['company_id']) && is_numeric($_POST['company_id'])) {
-    $company_id = mysqli_real_escape_string($link, $_POST['company_id']);
+$permission = mysqli_fetch_assoc($result)['candelete'];
+echo "Permission: $permission<br>"; // Debugging line
 
-    // SQL query to delete the bon record
-    $delete_query = "DELETE FROM bon WHERE id = '$company_id'";
+if ($permission != 1) {
+    echo "User does not have permission to delete.<br>";
+    exit();
+}
+
+// Debugging the GET parameters
+echo "GET Parameters: ";
+print_r($_GET); // Debugging line
+
+// Check if 'bon_id' parameter is provided in the URL
+if (isset($_GET['bon_id'])) {
+    $bon_id = $_GET['bon_id'];
+    echo "Bon ID to delete: $bon_id<br>"; // Debugging line
+
+    // Prepare and execute delete query
+    $delete_query = "DELETE FROM bon WHERE id = '$bon_id'";
+    echo "Delete Query: $delete_query<br>"; // Debugging line
 
     if (mysqli_query($link, $delete_query)) {
-        $_SESSION['delete_message'] = "Bon deleted successfully.";
+        echo "Bon deleted successfully.<br>";
+        // Redirect to another page after successful deletion (optional)
+        header("Location: bons.php");
+        exit();
     } else {
-        $_SESSION['delete_message'] = "Error deleting bon: " . mysqli_error($link);
+        echo "Error deleting bon: " . mysqli_error($link) . "<br>";
     }
 } else {
-    $_SESSION['delete_message'] = "Invalid bon ID.";
+    echo "No 'bon_id' parameter provided.<br>";
 }
 
-header("Location: bons.php");
-exit;
+// Close the linkection
+header("Location: bons.php")
 ?>
