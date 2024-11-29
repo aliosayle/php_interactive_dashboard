@@ -1,6 +1,3 @@
-
-
-
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 
@@ -72,12 +69,25 @@
                                                 <input class="form-control" type="text" name="user_id" id="user_id"
                                                     required>
                                             </div>
-
                                             <div class="mb-3">
-                                                <label for="company_id" class="form-label">Company ID</label>
-                                                <input class="form-control" type="text" name="company_id"
-                                                    id="company_id" required>
+                                                <label for="company_name" class="form-label">Company Name</label>
+                                                <select class="form-select" id="company_name" name="company_name" required>
+                                                    <option value="" disabled selected>Select a company</option>
+                                                    <?php
+                                                    include 'layouts/config.php';
+                                                    $query = "SELECT id, company_name FROM companies";
+                                                    $result = mysqli_query($link, $query);
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        echo "<option value='{$row['id']}'>{$row['company_name']}</option>";
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
+
+                                            <!-- Hidden Field for Company ID -->
+                                            <input type="hidden" id="company_id" name="company_id" required>
+
+
 
                                             <div class="mb-3">
                                                 <label for="amount_1" class="form-label">Amount 1</label>
@@ -86,20 +96,12 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="currency_1" class="form-label">Currency 2</label>
+                                                <label for="currency_1" class="form-label">Currency 1</label>
                                                 <select class="form-select" name="currency_1" id="currency_1">
                                                     <option value="USD">USD</option>
                                                     <option value="EUR">EUR</option>
-                                                    <option value="EGP">CF</option>
+                                                    <option value="CF">CF</option>
                                                     <!-- Add other currencies as needed -->
-                                                </select>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="is_voided" class="form-label">Is Voided</label>
-                                                <select class="form-select" name="isvoided" id="isvoided" required>
-                                                    <option value="1">Yes</option>
-                                                    <option value="0">No</option>
                                                 </select>
                                             </div>
 
@@ -117,7 +119,7 @@
                                                 <select class="form-select" name="currency_2" id="currency_2">
                                                     <option value="USD">USD</option>
                                                     <option value="EUR">EUR</option>
-                                                    <option value="EGP">CF</option>
+                                                    <option value="CF">CF</option>
                                                     <!-- Add other currencies as needed -->
                                                 </select>
                                             </div>
@@ -125,7 +127,7 @@
 
 
                                             <div class="mb-3">
-                                                <label for="is_voided" class="form-label">Is Voided</label>
+                                                <label for="isvoided" class="form-label">Is Voided</label>
                                                 <select class="form-select" name="isvoided" id="isvoided" required>
                                                     <option value="1">Yes</option>
                                                     <option value="0">No</option>
@@ -148,21 +150,29 @@
 
 
                                             <div class="mb-3">
-                                                <label for="site_id" class="form-label">Site ID</label>
-                                                <input class="form-control" type="text" name="site_id" id="site_id"
-                                                    required>
+                                                <label for="site_name" class="form-label">Site</label>
+                                                <select class="form-select select2" name="site_name" id="site_name" required>
+                                                    <option value="">Select a site</option>
+                                                    <?php
+                                                    $query = "SELECT site_name FROM sites";
+                                                    $result = mysqli_query($link, $query);
+
+                                                    if ($result) {
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            echo '<option value="' . htmlspecialchars($row['site_name'], ENT_QUOTES) . '">' . htmlspecialchars($row['site_name'], ENT_QUOTES) . '</option>';
+                                                        }
+                                                    } else {
+                                                        echo '<option value="">Error fetching sites</option>';
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
 
-                                            <div class="mb-3">
-                                                <label for="company_name" class="form-label">Company Name</label>
-                                                <input class="form-control" type="text" name="company_name"
-                                                    id="company_name" required>
-                                            </div>
 
                                             <div class="mb-3">
                                                 <label for="description" class="form-label">Comments</label>
                                                 <textarea class="form-control" name="description" id="description"
-                                                    rows="3" required></textarea>
+                                                    rows="3"></textarea>
                                             </div>
 
                                             <div class="mb-3">
@@ -179,7 +189,7 @@
 
                                             <div class="mb-3">
                                                 <label for="paid_by" class="form-label">Beneficier Name</label>
-                                                <input class="form-control" type="text" name="paid_by" id="paid_by"
+                                                <input class="form-control" type="text" name="beneficier_name" id="beneficier_name"
                                                     required>
                                             </div>
                                         </div>
@@ -210,6 +220,14 @@
 
 <!-- JAVASCRIPT -->
 <?php include 'layouts/vendor-scripts.php'; ?>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select a site",
+            allowClear: true
+        });
+    });
+</script>
 
 <script src="assets/js/app.js"></script>
 

@@ -1,33 +1,52 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 // Start session
 session_start();
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 // Include database configuration
 include 'layouts/config.php';
 
+$user_id = $_SESSION['id'] ?? null;
+
+if (!$user_id) {
+    die("User not logged in.");
+}
+
+$permission_query = "SELECT canadd FROM users WHERE id = '$user_id'";
+$permission_result = mysqli_query($link, $permission_query);
+$permissions = mysqli_fetch_assoc($permission_result);
+
+if ($permissions['canadd'] != 1) {
+    header('Location: bons.php');
+    exit();  // It's a good practice to call exit() after a redirect
+}
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+
+echo '<pre>';
+print_r($_POST);
+echo '</pre>';
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     $reference = $_POST['reference'];
     $sequence_reference = $_POST['sequence_reference'];
     $user_id = $_POST['user_id'];
     $user_name = $_POST['user_name'];
-    $company_id = $_POST['company_id'];
     $company_name = $_POST['company_name'];
-    $site_id = $_POST['site_id'];
+    $site_name = $_POST['site_name'];
     $date_of_bon = $_POST['date'];
     $total_one = $_POST['amoun_1'];
     $currency_one = $_POST['currency_1'];
     $total_two = !empty($_POST['amount_2']) ? $_POST['amount_2'] : null;
     $currency_two = !empty($_POST['currency_2']) ? $_POST['currency_2'] : null;
-    $is_voided = ($_POST['isvoided'] == "Yes") ? 1 : 0;
+    $is_voided = ($_POST['isvoided'] == "1") ? 1 : 0;
     $comments = $_POST['description'];
     $account_number = $_POST['account_number'];
     $motive = $_POST['motive'];
-    $paid_by = $_POST['paid_by'];
+    $beneficier_name = $_POST['beneficier_name'];
+
 
     // Format numbers
     $total_one = number_format((float) $total_one, 4, '.', '');
@@ -125,67 +144,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $amount_in_lettres = '';
     $amount_in_lettres = numberToWordsFrench($total_one) . ' ' . $currency_one
-    . "<br>### ### ###<br>"
+    . "\n### ### ###\n"
     . numberToWordsFrench($total_two) . ' ' . $currency_two;
-    print(''. $amount_in_lettres);
 
-    if (!empty($total_two)) {
-        $amount_in_lettres = numberToWordsFrench($total_one) . ' ' . $currency_one
-            . "\n### ### ###\n"
-            . numberToWordsFrench($total_two) . ' ' . $currency_two;
-    } else {
-        $amount_in_lettres = numberToWordsFrench($total_one) . ' ' . $currency_one;
-    }
-
-    try {
-        // Prepare SQL insert query
-        $sql = "INSERT INTO bon 
-                (reference, sequence_reference, user_id, username, company_id, company_name, site_id, date_of_bon, 
-                total_one, total_two, currency_one, currency_two, amount_in_lettres, beneficier_name, motif, account_number, 
-                is_voided, comments) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        
 // Get actual values from $_POST or use them directly in the print statement
-$reference = $_POST['reference'];
-$sequence_reference = $_POST['sequence_reference'];
-$user_id = $_POST['user_id'];
-$user_name = $_POST['user_name'];
-$company_id = $_POST['company_id'];
-$company_name = $_POST['company_name'];
-$site_id = $_POST['site_id'];
-$date_of_bon = $_POST['date'];
-$total_one = $_POST['amoun_1'];
-$currency_one = $_POST['currency_1'];
-$total_two = !empty($_POST['amount_2']) ? $_POST['amount_2'] : null;
-$currency_two = !empty($_POST['currency_2']) ? $_POST['currency_2'] : null;
-$is_voided = ($_POST['isvoided'] == "Yes") ? 1 : 0;
-$comments = $_POST['description'];
-$account_number = $_POST['account_number'];
-$motive = $_POST['motive'];
-$paid_by = $_POST['paid_by'];
-$amount_in_lettres = ''; 
+$query = "SELECT id FROM sites WHERE site_name = '$site_name'";
+$result = mysqli_query($link, $query);
 
+if ($result) {
+    // Fetch the result as an associative array
+    $row = mysqli_fetch_assoc($result);
+
+    // Store the id in $site_id
+    $site_id = $row['id'] ?? null; // If no result, $site_id will be null
+} else {
+    // Handle query error
+    echo "Error: " . mysqli_error($link);
+}
+if (isset($site_id)) {
+    echo "Site ID: $site_id";
+} else {
+    echo "No matching record found.";
+}
+
+$query = "SELECT company_name FROM companies WHERE id = '$company_name'";
+$result = mysqli_query($link, $query);
+
+if ($result) {
+    // Fetch the result as an associative array
+    $row = mysqli_fetch_assoc($result);
+
+    // Store the id in $site_id
+    $company_id = $company_name;
+    $company_name = $row['company_name'] ?? null; // If no result, $company_id will be null
+} else {
+    // Handle query error
+    echo "Error: " . mysqli_error($link);
+}
+if (isset($company_id)) {
+    echo "Compny name: $company_name";
+    echo "company id: $company_id";
+} else {
+    echo "No matching record found.";
+}
 $sql = "INSERT INTO bon 
         (reference, sequence_reference, user_id, username, company_id, company_name, site_id, date_of_bon, 
         total_one, total_two, currency_one, currency_two, amount_in_lettres, beneficier_name, motif, account_number, 
         is_voided, comments) 
         VALUES ('$reference', '$sequence_reference', '$user_id', '$user_name', '$company_id', '$company_name', 
         '$site_id', '$date_of_bon', '$total_one', '$total_two', '$currency_one', '$currency_two', 
-        '$amount_in_lettres', '$comments', '$motive', '$account_number', '$is_voided', '$paid_by')";
+        '$amount_in_lettres', '$beneficier_name', '$motive', '$account_number', '$is_voided', '$comments')";
 
-
+echo $sql;
 if (mysqli_query($link, $sql)) {
     echo "Record inserted successfully!";
-    header("Location: bons.php");
+    // header("Location: bons.php");
 } else {
     echo "Error: " . mysqli_error($link);
 }
 
 
-    } catch (Exception $e) {
-        // Handle errors
-        die("Error: " . $e->getMessage());
-    }
+
 }
 ?>
