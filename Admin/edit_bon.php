@@ -5,8 +5,73 @@
     <title>Edit Bon | Admin Dashboard</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
-    <link rel="stylesheet" href="/components/db_lookup_component.css">
-    <script src="/components/db_lookup_component.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="components/db_lookup_component.css">
+    <script src="components/db_lookup_component.js"></script>
+<link rel="stylesheet" href="components/db_lookup_component.css">
+<script src="components/db_lookup_component.js"></script>
+
+<!-- Include select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<script>
+var $j = jQuery.noConflict();
+$j(document).ready(function() {
+    $j('#site_name').select2({
+        placeholder: 'Search for a site',
+        minimumInputLength: 2,
+        ajax: {
+            url: 'fetch_sites.php',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                console.log('Search query:', params.term);
+                return { search: params.term };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.items.map(function(item) {
+                        return {
+                            id: item.id,
+                            text: item.site_name
+                        };
+                    })
+                };
+            }
+        }
+    });
+
+    $j('#company_name').select2({
+        placeholder: "Search for a company", 
+        allowClear: true,
+        ajax: {
+            url: 'fetch_companies.php',
+            dataType: 'json',
+            delay: 250, 
+            data: function (params) {
+                return { search: params.term };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.items.map(function (item) {
+                        return {
+                            id: item.id,
+                            text: item.company_name
+                        };
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+});
+
+</script>
+
+
 </head>
 
 <?php include 'layouts/body.php'; ?>
@@ -175,6 +240,8 @@
                                                 </select>
                                             </div>
 
+
+
                                             <div class="mb-3">
                                                 <label for="description" class="form-label">Comments</label>
                                                 <textarea class="form-control" name="description" id="comments"
@@ -198,20 +265,7 @@
                                                 <input class="form-control" type="text" name="beneficier_name" id="beneficier_name"
                                                     value="<?php echo htmlspecialchars($row['beneficier_name']); ?>" required>
                                             </div>
-                                            <!-- <div class="dropdown-container">
-                                            <div class="dropdown" 
-                                                data-table-guid="b7c2da00-aef1-11ef-9eb4-0efd67b0fe78" 
-                                                data-keyfield-guid="0548dae0-aef2-11ef-9eb4-0efd67b0fe78" 
-                                                data-listfield-guid="1089d49a-aef2-11ef-9eb4-0efd67b0fe78"
-                                                data-fixed-list-guid="1dfa97f8-aef3-11ef-9eb4-0efd67b0fe78"
-                                                data-allow-clear-guid="1dfa97f8-aef3-11ef-9eb4-0efd67b0fe78">
-                                                <input type="text" class="search" placeholder="Search Customers..." autocomplete="off">
-                                                <button class="toggleDropdown">▼</button>
-                                                <div class="dropdown-content"></div>
-                                                <div class="keyfield-label">KeyField: None</div>
-                                            </div>
-                                        </div>
-                                                                            </div> -->
+
                                     </div>
 
                                     <div class="mt-4 d-flex justify-content-end">

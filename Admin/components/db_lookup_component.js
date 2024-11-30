@@ -21,7 +21,7 @@ $(document).ready(function () {
             isFetching = true;
 
             $.ajax({
-                url: '/backend/db_lookup_data.php',
+                url: 'backend/db_lookup_data.php',
                 method: 'GET',
                 data: {
                     search: searchValue,
@@ -41,14 +41,25 @@ $(document).ready(function () {
                         page = 1;
                     }
 
+                    // if (data.length > 0) {
+                    //     data.forEach(item => {
+                    //         dropdownContent.append(
+                    //             `<a href="#" data-key="${item[keyfieldGuid]}">${item[listfieldGuid]}</a>`
+                    //         );
+                    //     });
+                    //     page++;
+                    // }
+
                     if (data.length > 0) {
                         data.forEach(item => {
-                            dropdownContent.append(
-                                `<a href="#" data-key="${item[keyfieldGuid]}">${item[listfieldGuid]}</a>`
-                            );
+                            console.log(item[keyfieldGuid]); // Logs each item[keyfieldGuid] to the console
                         });
-                        page++;
+                    
+                    
+                            page++;
+
                     }
+                    
 
                     dropdownContent.show();
                     isFetching = false;
@@ -81,9 +92,19 @@ $(document).ready(function () {
         });
 
         toggleButton.on('click', function () {
+            // Log when the button is clicked
+            console.log('Toggle button clicked');
+            
+            // Log the value of searchInput
             searchValue = searchInput.val().trim();
+            console.log('Search value:', searchValue);
+            
+            // Log the call to fetchDropdownData
+            console.log('Calling fetchDropdownData with reset = true');
+            
             fetchDropdownData(true);
         });
+        
 
         dropdownContent.on('click', 'a', function (e) {
             e.preventDefault();

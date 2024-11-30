@@ -18,11 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $is_voided = mysqli_real_escape_string($link, $_POST['is_voided']);
     $date_of_bon = mysqli_real_escape_string($link, $_POST['date_of_bon']);
     $username = mysqli_real_escape_string($link, $_POST['username']);
-    $site_name = mysqli_real_escape_string($link, $_POST['site_name']);
+    $site_id = mysqli_real_escape_string($link, $_POST['site_name']);
     $comments = mysqli_real_escape_string($link, $_POST['description']);
     $account_number = mysqli_real_escape_string($link, $_POST['account_number']);
     $motif = mysqli_real_escape_string($link, $_POST['motif']);
     $beneficier_name = mysqli_real_escape_string($link, $_POST['beneficier_name']);
+
+    // Using var_dump to display detailed information about the $_POST array
+var_dump($_POST);
+
+// Using print_r to display a more readable version of the $_POST array
+print_r($_POST);
 
     // Prepare the SQL update query
     $update_query = "UPDATE bon SET 
@@ -37,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         is_voided = '$is_voided',
         date_of_bon = '$date_of_bon',
         username = '$username',
+        site_id = '$site_id',
         comments = '$comments',
         account_number = '$account_number',
         motif = '$motif',
@@ -53,7 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 } else {
     // If the form is not submitted, redirect back to the edit page with an error message
-    header("Location: edit_bon.php?bon_id=" . $_POST['id'] . "&error=Invalid request");
+    // header("Location: edit_bon.php?bon_id=" . $_POST['id'] . "&error=Invalid request");
+    echo "$update_query";
 }
 
 mysqli_close($link); // Close the database connection

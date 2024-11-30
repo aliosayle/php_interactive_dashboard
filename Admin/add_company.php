@@ -12,19 +12,19 @@ if (!$link) {
 
 $response = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
-    $company_name = mysqli_real_escape_string($link, $_POST['company_name']);
-    // Insert the company into the database
-    $insert_query = "INSERT INTO companies (company_name) VALUES ('$company_name')";
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name'])) {
+    $site_name = mysqli_real_escape_string($link, $_POST['site_name']);
+    // Insert the site into the database
+    $insert_query = "INSERT INTO sites (site_name) VALUES ('$site_name')";
 
     if (mysqli_query($link, $insert_query)) {
         // Success message
-        $success_message = 'New company added successfully.';
-        header('Location: companies.php'); // Redirect after successful addition
+        $success_message = 'New site added successfully.';
+        header('Location: sites.php'); // Redirect after successful addition
         exit;
     } else {
         // Error message
-        $error_message = 'Error adding company: ' . mysqli_error($link);
+        $error_message = 'Error adding site: ' . mysqli_error($link);
     }
 }
 ?>
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Company | Admin Panel</title>
+    <title>Add Site | Admin Panel</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
@@ -59,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="dashboard.php" class="breadcrumb-link">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="companies.php" class="breadcrumb-link">Companies</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Add New Company</li>
+                                    <li class="breadcrumb-item"><a href="sites.php" class="breadcrumb-link">Sites</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Add New Site</li>
                                 </ol>
                             </nav>
                         </div>
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Add New Company</h4>
+                                    <h4 class="card-title">Add New Site</h4>
                                 </div>
                                 <div class="card-body">
                                     <!-- Display Success or Error Messages -->
@@ -80,15 +80,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name'])) {
                                         <div class="alert alert-danger"><?= htmlspecialchars($error_message) ?></div>
                                     <?php endif; ?>
 
-                                    <!-- Form to add new company -->
+                                    <!-- Form to add new site -->
                                     <form method="POST" action="">
                                         <div class="form-group mb-3 row">
                                             <div class="col-md-8">
-                                                <label for="company_name">Company Name</label>
-                                                <input type="text" name="company_name" id="company_name" class="form-control" required>
+                                                <label for="site_name">Site Name</label>
+                                                <input type="text" name="site_name" id="site_name" class="form-control" required>
                                             </div>
                                             <div class="col-md-4 d-flex align-items-end">
-                                                <button type="submit" class="btn btn-primary">Add Company</button>
+                                                <button type="submit" class="btn btn-primary">Add Site</button>
                                             </div>
                                         </div>
                                     </form>
