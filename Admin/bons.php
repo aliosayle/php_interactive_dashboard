@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                         echo "<td>" . htmlspecialchars($row['currency_one']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['currency_two']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['amount_in_lettres']) . "</td>";
-                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id=" . (int)$row['site_id']))['site_name']) . "</td>";
+                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['site_name']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['account_number']) . "</td>";
                         echo "<td>" . ($row['is_voided'] == 1 ? 'Yes' : 'No') . "</td>";
