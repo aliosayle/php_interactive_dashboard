@@ -14,7 +14,7 @@ $translations = [
         'companies_table' => 'Companies Table',
         'add_new_bon' => 'Add New bonne',
         'reference' => 'Reference',
-        'site_id' => 'Site ID',
+        'site_name' => 'Site Name',
         'date_of_bon' => 'Date of Bon',
         'total_one' => 'Total One',
         'total_two' => 'Total Two',
@@ -37,7 +37,7 @@ $translations = [
         'companies_table' => 'Tableau des entreprises',
         'add_new_bon' => 'Ajouter une nouvelle bon',
         'reference' => 'Référence',
-        'site_id' => 'ID du site',
+        'site_name' => 'Nom du site',
         'date_of_bon' => 'Date de bon',
         'total_one' => 'Total Un',
         'total_two' => 'Total Deux',
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                     <th><?php echo translate('currency_one', $lang); ?></th>
                     <th><?php echo translate('currency_two', $lang); ?></th>
                     <th><?php echo translate('amount_in_lettres', $lang); ?></th>
-                    <th><?php echo translate('site_id', $lang); ?></th>
+                    <th><?php echo translate('site_name', $lang); ?></th>
                     <th><?php echo translate('motif', $lang); ?></th>
                     <th><?php echo translate('account_number', $lang); ?></th>
                     <th><?php echo translate('is_voided', $lang); ?></th>
@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                         echo "<td>" . htmlspecialchars($row['currency_one']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['currency_two']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['amount_in_lettres']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['site_id']) . "</td>";
+                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id=" . (int)$row['site_id']))['site_name']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['account_number']) . "</td>";
                         echo "<td>" . ($row['is_voided'] == 1 ? 'Yes' : 'No') . "</td>";

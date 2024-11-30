@@ -98,12 +98,13 @@
                                             <div class="mb-3">
                                                 <label for="currency_1" class="form-label">Currency 1</label>
                                                 <select class="form-select" name="currency_1" id="currency_1">
-                                                    <option value="USD">USD</option>
-                                                    <option value="EUR">EUR</option>
-                                                    <option value="CF">CF</option>
+                                                    <option value="USD" <?php echo ($currency_1 == 'USD') ? 'selected' : ''; ?>>USD</option>
+                                                    <option value="EUR" <?php echo ($currency_1 == 'EUR') ? 'selected' : ''; ?>>EUR</option>
+                                                    <option value="CF" <?php echo ($currency_1 == 'CF') ? 'selected' : ''; ?>>CF</option>
                                                     <!-- Add other currencies as needed -->
                                                 </select>
                                             </div>
+
 
 
                                             <div class="mb-3">
@@ -114,16 +115,16 @@
 
 
 
+
                                             <div class="mb-3">
                                                 <label for="currency_2" class="form-label">Currency 2</label>
                                                 <select class="form-select" name="currency_2" id="currency_2">
-                                                    <option value="USD">USD</option>
-                                                    <option value="EUR">EUR</option>
-                                                    <option value="CF">CF</option>
+                                                    <option value="USD" <?php echo ($currency_2 == 'USD') ? 'selected' : ''; ?>>USD</option>
+                                                    <option value="EUR" <?php echo ($currency_2 == 'EUR') ? 'selected' : ''; ?>>EUR</option>
+                                                    <option value="CF" <?php echo ($currency_2 == 'CF') ? 'selected' : ''; ?>>CF</option>
                                                     <!-- Add other currencies as needed -->
                                                 </select>
                                             </div>
-
 
 
                                             <div class="mb-3">

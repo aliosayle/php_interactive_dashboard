@@ -58,6 +58,7 @@
                                     $result = mysqli_query($link, $query);
                                     if ($result && mysqli_num_rows($result) > 0) {
                                         $row = mysqli_fetch_assoc($result);
+
                                     } else {
                                         echo "<p>Bon not found.</p>";
                                         exit;
@@ -158,15 +159,15 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="site_name" class="form-label">Site</label>
-                                                <select class="form-select select2" name="site_name" id="site_name" required>
-                                                    <option value="">Select a site</option>
+                                                <label for="site_name" class="form-label">Site Name</label>
+                                                <select class="form-select" id="site_name" name="site_name" required>
+                                                    <option value="" disabled>Select a site</option>
                                                     <?php
-                                                    $query = "SELECT site_name FROM sites";
+                                                    $query = "SELECT id, site_name FROM sites";
                                                     $result = mysqli_query($link, $query);
                                                     while ($site = mysqli_fetch_assoc($result)) {
-                                                        $selected = ($site['site_name'] == $row['site_name']) ? 'selected' : '';
-                                                        echo '<option value="' . htmlspecialchars($site['site_name'], ENT_QUOTES) . '" ' . $selected . '>' . htmlspecialchars($site['site_name'], ENT_QUOTES) . '</option>';
+                                                        $selected = ($site['id'] == $row['site_id']) ? 'selected' : '';
+                                                        echo "<option value='{$site['id']}' $selected>{$site['site_name']}</option>";
                                                     }
                                                     ?>
                                                 </select>

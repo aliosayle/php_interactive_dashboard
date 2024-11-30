@@ -161,11 +161,7 @@ if ($result) {
     // Handle query error
     echo "Error: " . mysqli_error($link);
 }
-if (isset($site_id)) {
-    echo "Site ID: $site_id";
-} else {
-    echo "No matching record found.";
-}
+
 
 $query = "SELECT company_name FROM companies WHERE id = '$company_name'";
 $result = mysqli_query($link, $query);
@@ -181,12 +177,7 @@ if ($result) {
     // Handle query error
     echo "Error: " . mysqli_error($link);
 }
-if (isset($company_id)) {
-    echo "Compny name: $company_name";
-    echo "company id: $company_id";
-} else {
-    echo "No matching record found.";
-}
+
 $sql = "INSERT INTO bon 
         (reference, sequence_reference, user_id, username, company_id, company_name, site_id, date_of_bon, 
         total_one, total_two, currency_one, currency_two, amount_in_lettres, beneficier_name, motif, account_number, 
@@ -197,8 +188,7 @@ $sql = "INSERT INTO bon
 
 echo $sql;
 if (mysqli_query($link, $sql)) {
-    echo "Record inserted successfully!";
-    // header("Location: bons.php");
+    header("Location: bons.php");
 } else {
     echo "Error: " . mysqli_error($link);
 }
