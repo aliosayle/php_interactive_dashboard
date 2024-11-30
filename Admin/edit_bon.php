@@ -5,6 +5,8 @@
     <title>Edit Bon | Admin Dashboard</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
+    <link rel="stylesheet" href="/components/db_lookup_component.css">
+    <script src="/components/db_lookup_component.js"></script>
 </head>
 
 <?php include 'layouts/body.php'; ?>
@@ -196,7 +198,20 @@
                                                 <input class="form-control" type="text" name="beneficier_name" id="beneficier_name"
                                                     value="<?php echo htmlspecialchars($row['beneficier_name']); ?>" required>
                                             </div>
+                                            <!-- <div class="dropdown-container">
+                                            <div class="dropdown" 
+                                                data-table-guid="b7c2da00-aef1-11ef-9eb4-0efd67b0fe78" 
+                                                data-keyfield-guid="0548dae0-aef2-11ef-9eb4-0efd67b0fe78" 
+                                                data-listfield-guid="1089d49a-aef2-11ef-9eb4-0efd67b0fe78"
+                                                data-fixed-list-guid="1dfa97f8-aef3-11ef-9eb4-0efd67b0fe78"
+                                                data-allow-clear-guid="1dfa97f8-aef3-11ef-9eb4-0efd67b0fe78">
+                                                <input type="text" class="search" placeholder="Search Customers..." autocomplete="off">
+                                                <button class="toggleDropdown">▼</button>
+                                                <div class="dropdown-content"></div>
+                                                <div class="keyfield-label">KeyField: None</div>
+                                            </div>
                                         </div>
+                                                                            </div> -->
                                     </div>
 
                                     <div class="mt-4 d-flex justify-content-end">
