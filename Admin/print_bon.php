@@ -81,7 +81,7 @@ if (isset($_POST['bon_id'])) {
             <div class='header'>Bon à Payer N° " . htmlspecialchars($row['reference']) . "</div>
             <div class='bon-details'>
                 <table>
-                    <tr><th>Sté</th><td>AFRIFOOD</td><th>Site</th><td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id = " . intval($row['site_id'])))['site_name'] ?? 'Unknown') . "</td></tr>
+                <tr><th>Sté</th><td>AFRIFOOD</td><th>Site</th><td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id = '" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['site_name'] ?? 'Unknown') . "</td></tr>
                     <tr><th>Order Ref #</th><td>" . htmlspecialchars($row['reference']) . "</td><th>Date</th><td>" . htmlspecialchars($row['date_of_bon']) . "</td></tr>
                     <tr><th>Numéro de Compte</th><td>" . htmlspecialchars($row['account_number']) . "</td><th>Montant</th>
                         <td>
@@ -114,16 +114,16 @@ if (isset($_POST['bon_id'])) {
             </div>
         </div>
     ";
-    
+
         // Initialize mPDF with custom temporary directory
         $tempDir = __DIR__ . '/../tmp/mpdf';  // Modify the path as necessary
         $mpdf = new \Mpdf\Mpdf([
             'tempDir' => $tempDir
         ]);
-        
+
         // Write content to PDF
         $mpdf->WriteHTML($content);
-        
+
         // Output the PDF
         $mpdf->Output('bon_details.pdf', 'I'); // 'I' will display the PDF in the browser
     } else {
