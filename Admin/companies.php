@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                     <div class="col-12">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-3">
-                                <li class="breadcrumb-item"><a href="index.php"><?php echo translate('dashboard', $lang); ?></a></li>
+                                <li class="breadcrumb-item"><a href="index.php">Apps</a></li>
                                 <li class="breadcrumb-item active" aria-current="page"><?php echo translate('companies', $lang); ?></li>
                             </ol>
                         </nav>

@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-3">
                                     <li class="breadcrumb-item"><a
-                                            href="index.php"><?php echo translate('dashboard', $lang); ?></a></li>
+                                            href="index.php">Apps</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">
                                         <?php echo translate('bons', $lang); ?>
                                     </li>
