@@ -145,18 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                     <h4 class="card-title">Bons</h4>
                                 </div>
                                 <div class="card-body">
-                                    <div class="container">
-                                        <div class=" justify-content-end mb-4">
-                                            <form method="POST" action="add_bon.php">
-                                                <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0)
-                                                    echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
-                                                    <i class="fas fa-plus me-2"></i>
-                                                    Add New
-                                                </button>
-                                                <br>
-                                            </form>
-                                        </div>
-                                    </div>
+                                <form method="POST" action="add_bon.php" class="mb-4">
+                                    <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0) echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
+                                        <i class="fas fa-plus me-2"></i> Add Bon
+                                    </button>
+                                </form>
 
 
                                     <div class="table-responsive">
