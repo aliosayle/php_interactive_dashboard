@@ -6,10 +6,10 @@
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="components/db_lookup_component.css">
-    <script src="components/db_lookup_component.js"></script>
-<link rel="stylesheet" href="components/db_lookup_component.css">
-<script src="components/db_lookup_component.js"></script>
+    <!-- <link rel="stylesheet" href="components/db_lookup_component.css"> -->
+    <!-- <script src="components/db_lookup_component.js"></script> -->
+<!-- <link rel="stylesheet" href="components/db_lookup_component.css"> -->
+<!-- <script src="components/db_lookup_component.js"></script> -->
 
 <!-- Include select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />

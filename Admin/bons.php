@@ -213,10 +213,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                                         echo "</form>";
 
                                                         // Delete Button with FontAwesome icon
-                                                        echo "<form method='GET' action='delete_bon.php' style='display:inline-block;'>";
+                                                        echo "<form method='GET' action='delete_bon.php' style='display:inline-block;' class='delete-form'>";
                                                         echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
-                                                        echo "<button type='submit' class='btn btn-sm btn-danger' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . "><i class='fas fa-trash-alt'></i></button>";
+                                                        echo "<button type='button' class='btn btn-sm btn-danger delete-btn'><i class='fas fa-trash-alt'></i></button>";
                                                         echo "</form>";
+
 
                                                         // Print Button with FontAwesome icon
                                                         echo "<form method='POST' action='print_bon.php' style='display:inline-block;'>";
@@ -324,7 +325,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
 
 
 
-    <script>$(document).ready(function () {
+    <!-- <script>$(document).ready(function () {
             // Event listener for the delete button
             $('.delete-bon').on('click', function () {
                 // Retrieve the bon ID from the data attribute
@@ -378,7 +379,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                     });
                 });
             });
+        } -->
+            <script src = "https://cdn.jsdelivr.net/npm/sweetalert2@11" ></scrip>
+    <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function (e) {
+                        const form = this.closest('.delete-form'); // Get the form associated with this button
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit(); // Submit the form if confirmed
+                            }
+                        });
+                    });
+                });
+            });
     </script>
+
 
     <link rel="stylesheet" href="styles.css">
 
