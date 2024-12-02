@@ -2,7 +2,7 @@
 <?php include 'layouts/head-main.php'; ?>
 
 <head>
-    <title><?php echo $language["Dashboard"]; ?> | Minia - Admin & Dashboard Template</title>
+    <title><?php echo $language["Dashboard"]; ?> | BMS Bon Management System - Admin & Dashboard Template</title>
 
     <?php include 'layouts/head.php'; ?>
 
@@ -34,7 +34,7 @@
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Minia</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">BMS Bon Management System</a></li>
                                     <li class="breadcrumb-item active">Dashboard</li>
                                 </ol>
                             </div>

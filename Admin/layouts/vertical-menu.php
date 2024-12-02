@@ -9,7 +9,7 @@
                         <img src="assets/images/logo-sm.svg" alt="" height="24">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">Minia</span>
+                        <img src="assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">BMS</span>
                     </span>
                 </a>
 
@@ -18,7 +18,7 @@
                         <img src="assets/images/logo-sm.svg" alt="" height="24">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">Minia</span>
+                        <img src="assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">BMS</span>
                     </span>
                 </a>
             </div>
