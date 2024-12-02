@@ -77,8 +77,10 @@ $j(document).ready(function() {
 <?php include 'layouts/body.php'; ?>
 
 <!-- Begin page -->
+
 <div id="layout-wrapper">
-    <?php include 'layouts/menu.php'; ?>
+<?php include 'layouts/menu.php'; ?>
+
 
     <!-- ============================================================== -->
     <!-- Start right Content here -->
