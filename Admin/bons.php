@@ -166,6 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                                     <th><?php echo translate('currency_two', $lang); ?></th>
                                                     <th><?php echo translate('amount_in_lettres', $lang); ?></th>
                                                     <th><?php echo translate('site_name', $lang); ?></th>
+                                                    <th>Company Name</th>
                                                     <th><?php echo translate('motif', $lang); ?></th>
                                                     <th><?php echo translate('account_number', $lang); ?></th>
                                                     <th><?php echo translate('is_voided', $lang); ?></th>
@@ -193,6 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                                         echo "<td>" . htmlspecialchars($row['currency_two']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['amount_in_lettres']) . "</td>";
                                                         echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['site_name']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT company_name FROM companies WHERE id='" . mysqli_real_escape_string($link, $row['company_id']) . "'"))['company_name']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['account_number']) . "</td>";
                                                         echo "<td>" . ($row['is_voided'] == 1 ? 'Yes' : 'No') . "</td>";
