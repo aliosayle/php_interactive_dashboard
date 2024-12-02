@@ -107,8 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <title>Bons Table</title>
 
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
@@ -132,8 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                         <div class="col-12">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-3">
-                                    <li class="breadcrumb-item"><a
-                                            href="index.php">Apps</a></li>
+                                    <li class="breadcrumb-item">Login</li>
                                     <li class="breadcrumb-item active" aria-current="page">
                                         <?php echo translate('bons', $lang); ?>
                                     </li>
@@ -144,93 +145,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                     <h4 class="card-title">Bons</h4>
                                 </div>
                                 <div class="card-body">
-    <div class="d-flex justify-content-end mb-4">
-        <form method="POST" action="add_bon.php" class="d-inline">
-            <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0)
-                echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
-                <i class="fas fa-plus me-2"></i>
-                Add New
-            </button>
-        </form>
-    </div>
-
-    <div class="table-responsive">
-        <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
-            <thead>
-                <tr>
-                    <th><?php echo translate('id', $lang); ?></th>
-                    <th><?php echo translate('reference', $lang); ?></th>
-                    <th><?php echo translate('beneficier_name', $lang); ?></th>
-                    <th><?php echo translate('date_of_bon', $lang); ?></th>
-                    <th><?php echo translate('total_one', $lang); ?></th>
-                    <th><?php echo translate('total_two', $lang); ?></th>
-                    <th><?php echo translate('currency_one', $lang); ?></th>
-                    <th><?php echo translate('currency_two', $lang); ?></th>
-                    <th><?php echo translate('amount_in_lettres', $lang); ?></th>
-                    <th><?php echo translate('site_name', $lang); ?></th>
-                    <th><?php echo translate('motif', $lang); ?></th>
-                    <th><?php echo translate('account_number', $lang); ?></th>
-                    <th><?php echo translate('is_voided', $lang); ?></th>
-                    <th><?php echo translate('comments', $lang); ?></th>
-                    <th><?php echo translate('actions', $lang); ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $query = "SELECT * FROM bon"; // Query to fetch all data from the 'bon' table
-                $result = mysqli_query($link, $query);
-                if (!$result) {
-                    die("Query failed: " . mysqli_error($link));
-                }
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['id']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['reference']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['beneficier_name']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['date_of_bon']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['total_one']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['total_two']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['currency_one']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['currency_two']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['amount_in_lettres']) . "</td>";
-                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['site_name']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['account_number']) . "</td>";
-                        echo "<td>" . ($row['is_voided'] == 1 ? 'Yes' : 'No') . "</td>";
-                        echo "<td>" . htmlspecialchars($row['comments']) . "</td>";
-                        echo "<td>";
-
-                        // Edit Button with FontAwesome icon
-                        echo "<form method='GET' action='edit_bon.php' style='display:inline-block;'>";
-                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
-                        echo "<button type='submit' class='btn btn-sm btn-info' " . ($permissions['canedit'] == 0 ? 'disabled' : '') . "><i class='fas fa-pencil-alt'></i></button>";
-                        echo "</form>";
-
-                        // Delete Button with FontAwesome icon
-                        echo "<form method='GET' action='delete_bon.php' style='display:inline-block;'>";
-                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
-                        echo "<button type='submit' class='btn btn-sm btn-danger' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . "><i class='fas fa-trash-alt'></i></button>";
-                        echo "</form>";
-
-                        // Print Button with FontAwesome icon
-                        echo "<form method='POST' action='print_bon.php' style='display:inline-block;'>";
-                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
-                        echo "<button type='submit' class='btn btn-sm btn-secondary'><i class='fas fa-print'></i></button>";
-                        echo "</form>";
+                                    <div class="container">
+                                        <div class=" justify-content-end mb-4">
+                                            <form method="POST" action="add_bon.php">
+                                                <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0)
+                                                    echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
+                                                    <i class="fas fa-plus me-2"></i>
+                                                    Add New
+                                                </button>
+                                                <br>
+                                            </form>
+                                        </div>
+                                    </div>
 
 
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='14' class='text-center'>" . translate('no_data_found', $lang) . "</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-    </div>
-</div>
+                                    <div class="table-responsive">
+                                        <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th><?php echo translate('id', $lang); ?></th>
+                                                    <th><?php echo translate('reference', $lang); ?></th>
+                                                    <th><?php echo translate('beneficier_name', $lang); ?></th>
+                                                    <th><?php echo translate('date_of_bon', $lang); ?></th>
+                                                    <th><?php echo translate('total_one', $lang); ?></th>
+                                                    <th><?php echo translate('total_two', $lang); ?></th>
+                                                    <th><?php echo translate('currency_one', $lang); ?></th>
+                                                    <th><?php echo translate('currency_two', $lang); ?></th>
+                                                    <th><?php echo translate('amount_in_lettres', $lang); ?></th>
+                                                    <th><?php echo translate('site_name', $lang); ?></th>
+                                                    <th><?php echo translate('motif', $lang); ?></th>
+                                                    <th><?php echo translate('account_number', $lang); ?></th>
+                                                    <th><?php echo translate('is_voided', $lang); ?></th>
+                                                    <th><?php echo translate('comments', $lang); ?></th>
+                                                    <th><?php echo translate('actions', $lang); ?></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $query = "SELECT * FROM bon"; // Query to fetch all data from the 'bon' table
+                                                $result = mysqli_query($link, $query);
+                                                if (!$result) {
+                                                    die("Query failed: " . mysqli_error($link));
+                                                }
+                                                if (mysqli_num_rows($result) > 0) {
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        echo "<tr>";
+                                                        echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['reference']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['beneficier_name']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['date_of_bon']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['total_one']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['total_two']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['currency_one']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['currency_two']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['amount_in_lettres']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['site_name']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['account_number']) . "</td>";
+                                                        echo "<td>" . ($row['is_voided'] == 1 ? 'Yes' : 'No') . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['comments']) . "</td>";
+                                                        echo "<td>";
+
+                                                        // Edit Button with FontAwesome icon
+                                                        echo "<form method='GET' action='edit_bon.php' style='display:inline-block;'>";
+                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                        echo "<button type='submit' class='btn btn-sm btn-info' " . ($permissions['canedit'] == 0 ? 'disabled' : '') . "><i class='fas fa-pencil-alt'></i></button>";
+                                                        echo "</form>";
+
+                                                        // Delete Button with FontAwesome icon
+                                                        echo "<form method='GET' action='delete_bon.php' style='display:inline-block;'>";
+                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                        echo "<button type='submit' class='btn btn-sm btn-danger' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . "><i class='fas fa-trash-alt'></i></button>";
+                                                        echo "</form>";
+
+                                                        // Print Button with FontAwesome icon
+                                                        echo "<form method='POST' action='print_bon.php' style='display:inline-block;'>";
+                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                        echo "<button type='submit' class='btn btn-sm btn-secondary'><i class='fas fa-print'></i></button>";
+                                                        echo "</form>";
+
+
+                                                        echo "</td>";
+                                                        echo "</tr>";
+                                                    }
+                                                } else {
+                                                    echo "<tr><td colspan='14' class='text-center'>" . translate('no_data_found', $lang) . "</td></tr>";
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -238,6 +243,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                 </div>
             </div>
         </div>
+        <?php include 'layouts/footer.php'; ?>
+
     </div>
 
     <?php include 'layouts/vendor-scripts.php'; ?>
@@ -324,53 +331,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                 var bon_id = $(this).data('id');
                 $(document).ready(function () {
 
-                // Display a SweetAlert2 confirmation dialog
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to recover this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Proceed with the deletion via AJAX if the user confirms
-                        $.ajax({
-                            url: 'delete_bon.php', // Backend script to handle deletion
-                            type: 'GET',          // Request method
-                            data: { bon_id: bon_id }, // Data sent to the server
-                            success: function (response) {
-                                // On successful deletion
-                                Swal.fire(
-                                    'Deleted!',
-                                    'The bon has been deleted.',
-                                    'success'
-                                ).then(() => {
-                                    // Reload the page to reflect changes
-                                    location.reload();
-                                });
-                            },
-                            error: function () {
-                                // Handle any errors during the deletion process
-                                Swal.fire(
-                                    'Error!',
-                                    'There was an issue deleting the bon.',
-                                    'error'
-                                );
-                            }
-                        });
-                    } else {
-                        // If the user cancels the deletion
-                        Swal.fire(
-                            'Cancelled',
-                            'Your bon is safe :)',
-                            'error'
-                        );
-                    }
+                    // Display a SweetAlert2 confirmation dialog
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to recover this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Proceed with the deletion via AJAX if the user confirms
+                            $.ajax({
+                                url: 'delete_bon.php', // Backend script to handle deletion
+                                type: 'GET',          // Request method
+                                data: { bon_id: bon_id }, // Data sent to the server
+                                success: function (response) {
+                                    // On successful deletion
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'The bon has been deleted.',
+                                        'success'
+                                    ).then(() => {
+                                        // Reload the page to reflect changes
+                                        location.reload();
+                                    });
+                                },
+                                error: function () {
+                                    // Handle any errors during the deletion process
+                                    Swal.fire(
+                                        'Error!',
+                                        'There was an issue deleting the bon.',
+                                        'error'
+                                    );
+                                }
+                            });
+                        } else {
+                            // If the user cancels the deletion
+                            Swal.fire(
+                                'Cancelled',
+                                'Your bon is safe :)',
+                                'error'
+                            );
+                        }
+                    });
                 });
             });
-        });
     </script>
 
     <link rel="stylesheet" href="styles.css">

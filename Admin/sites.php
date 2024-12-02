@@ -103,10 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name']) && $perm
                         <div class="col-12">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-3">
-                                    <li class="breadcrumb-item"><a
-                                            href="index.php">Apps</a></li>
+                                    <li class="breadcrumb-item">Login</li>
                                     <li class="breadcrumb-item active" aria-current="page">
-                                        <?php echo translate('sites', $lang); ?></li>
+                                        <?php echo translate('sites', $lang); ?>
+                                    </li>
                                 </ol>
                             </nav>
                             <div class="card">
@@ -198,54 +198,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name']) && $perm
     <script src="assets/js/app.js"></script>
     <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script>
-    $(document).on('click', '.sa-warning', function (e) {
-        var siteId = $(this).data('id');
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
-            customClass: {
-                confirmButton: 'btn btn-primary',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-        }).then(function (result) {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: 'delete_site.php',
-                    type: 'POST',
-                    data: { site_id: siteId },
-                    success: function (response) {
-                        if (response === 'success') {
-                            Swal.fire('Deleted!', 'Your record has been deleted.', 'success').then(function () {
-                                // Reload the page after the success message
-                                location.reload();
-                            });
-                        } 
-                    },
-                    complete: function() {
-                        // Ensure page reload after any AJAX call ends (in case of failure as well)
-                        location.reload();
-                    }
-                });
-            }
+        $(document).on('click', '.sa-warning', function (e) {
+            var siteId = $(this).data('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'delete_site.php',
+                        type: 'POST',
+                        data: { site_id: siteId },
+                        success: function (response) {
+                            if (response === 'success') {
+                                Swal.fire('Deleted!', 'Your record has been deleted.', 'success').then(function () {
+                                    // Reload the page after the success message
+                                    location.reload();
+                                });
+                            }
+                        },
+                        complete: function () {
+                            // Ensure page reload after any AJAX call ends (in case of failure as well)
+                            location.reload();
+                        }
+                    });
+                }
+            });
         });
-    });
-</script>
+    </script>
 
     <script>
-    $(document).ready(function() {
-        $('#datatable').DataTable({
-            "searching": true,  // Enable searching
-            "paging": true,     // Enable pagination
-            "info": true,       // Show info text (e.g., "Showing 1 to 10 of 50 entries")
-            "responsive": true  // Make the table responsive
+        $(document).ready(function () {
+            $('#datatable').DataTable({
+                "searching": true,  // Enable searching
+                "paging": true,     // Enable pagination
+                "info": true,       // Show info text (e.g., "Showing 1 to 10 of 50 entries")
+                "responsive": true  // Make the table responsive
+            });
         });
-    });
-</script>
+    </script>
 
     <link rel="stylesheet" href="styles.css">
 

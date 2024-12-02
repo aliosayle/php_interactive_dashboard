@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Company | Minia - Admin & Dashboard Template</title>
+    <title>Edit Company | BMS Bon Management System</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
@@ -149,94 +149,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_id'], $_POST[
                                     </form>
                                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                     <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const form = document.getElementById('edit-company-form');
-        const companyNameInput = document.getElementById('company_name');
-        const cancelButton = document.getElementById('cancel-btn');
+                                        document.addEventListener('DOMContentLoaded', (event) => {
+                                            const form = document.getElementById('edit-company-form');
+                                            const companyNameInput = document.getElementById('company_name');
+                                            const cancelButton = document.getElementById('cancel-btn');
 
-        let isUnsaved = false; // Track if there are unsaved changes
+                                            let isUnsaved = false; // Track if there are unsaved changes
 
-        // Handle the "Save Changes" button click
-        const confirmUpdate = () => {
-            const companyName = companyNameInput.value;
+                                            // Handle the "Save Changes" button click
+                                            const confirmUpdate = () => {
+                                                const companyName = companyNameInput.value;
 
-            if (companyName.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Company name cannot be empty!',
-                });
-                return false;
-            }
+                                                if (companyName.trim() === "") {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Oops...',
+                                                        text: 'Company name cannot be empty!',
+                                                    });
+                                                    return false;
+                                                }
 
-            isUnsaved = false; // Reset unsaved changes flag
-            form.submit(); // Directly submit the form
-        };
+                                                isUnsaved = false; // Reset unsaved changes flag
+                                                form.submit(); // Directly submit the form
+                                            };
 
-        document.getElementById('sa-params').addEventListener('click', confirmUpdate);
+                                            document.getElementById('sa-params').addEventListener('click', confirmUpdate);
 
-        form.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent the default form submission
-                confirmUpdate();
-            }
-        });
+                                            form.addEventListener('keydown', (event) => {
+                                                if (event.key === 'Enter') {
+                                                    event.preventDefault(); // Prevent the default form submission
+                                                    confirmUpdate();
+                                                }
+                                            });
 
-        // Handle the cancel button click (navigate to companies.php)
-        cancelButton.addEventListener('click', () => {
-            const companyName = companyNameInput.value;
+                                            // Handle the cancel button click (navigate to companies.php)
+                                            cancelButton.addEventListener('click', () => {
+                                                const companyName = companyNameInput.value;
 
-            if (companyName.trim() !== "") {
-                // If there are unsaved changes, show the SweetAlert confirmation
-                isUnsaved = true;
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You will lose any unsaved changes.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, cancel!',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // If confirmed, navigate to companies.php
-                        window.location.href = 'companies.php';
-                    }
-                });
-            } else {
-                // If no unsaved changes, navigate directly
-                window.location.href = 'companies.php';
-            }
-        });
+                                                if (companyName.trim() !== "") {
+                                                    // If there are unsaved changes, show the SweetAlert confirmation
+                                                    isUnsaved = true;
+                                                    Swal.fire({
+                                                        title: 'Are you sure?',
+                                                        text: "You will lose any unsaved changes.",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Yes, cancel!',
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            // If confirmed, navigate to companies.php
+                                                            window.location.href = 'companies.php';
+                                                        }
+                                                    });
+                                                } else {
+                                                    // If no unsaved changes, navigate directly
+                                                    window.location.href = 'companies.php';
+                                                }
+                                            });
 
-        // Intercept page unload event with SweetAlert for unsaved changes
-        window.addEventListener('beforeunload', (event) => {
-            const companyName = companyNameInput.value;
+                                            // Intercept page unload event with SweetAlert for unsaved changes
+                                            window.addEventListener('beforeunload', (event) => {
+                                                const companyName = companyNameInput.value;
 
-            if (companyName.trim() !== "" && !isUnsaved) {
-                // Prevent the default browser alert
-                event.preventDefault();
+                                                if (companyName.trim() !== "" && !isUnsaved) {
+                                                    // Prevent the default browser alert
+                                                    event.preventDefault();
 
-                // Show custom SweetAlert for unsaved changes confirmation
-                Swal.fire({
-                    title: 'You have unsaved changes.',
-                    text: 'Are you sure you want to leave?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, leave',
-                    cancelButtonText: 'No, stay'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // If user confirms, allow navigation (reload or navigate)
-                        window.location.href = event.target.URL;
-                    }
-                });
-            }
-        });
-    });
-</script>
+                                                    // Show custom SweetAlert for unsaved changes confirmation
+                                                    Swal.fire({
+                                                        title: 'You have unsaved changes.',
+                                                        text: 'Are you sure you want to leave?',
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Yes, leave',
+                                                        cancelButtonText: 'No, stay'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            // If user confirms, allow navigation (reload or navigate)
+                                                            window.location.href = event.target.URL;
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        });
+                                    </script>
 
 
 

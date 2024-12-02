@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Login | Minia - Admin & Dashboard Template</title>
+    <title>Login | BMS Bon Management System</title>
     <?php include 'layouts/head.php'; ?>
 
     <?php include 'layouts/head-style.php'; ?>
@@ -20,18 +20,20 @@
                         <div class="d-flex flex-column h-100">
                             <div class="mb-4 mb-md-5 text-center">
                                 <a href="index.php" class="d-block auth-logo">
-                                    <img src="assets/images/logo-sm.svg" alt="" height="28"> <span class="logo-txt">Minia</span>
+                                    <img src="assets/images/logo-sm.svg" alt="" height="28"> <span class="logo-txt">BMS
+                                        Bon Management System</span>
                                 </a>
                             </div>
                             <div class="auth-content my-auto">
                                 <div class="text-center">
                                     <h5 class="mb-0">Welcome Back !</h5>
-                                    <p class="text-muted mt-2">Sign in to continue to Minia.</p>
+                                    <p class="text-muted mt-2">Sign in to continue to BMS Bon Management System.</p>
                                 </div>
                                 <form class="custom-form mt-4 pt-2">
                                     <div class="mb-3">
                                         <label class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="username" placeholder="Enter username">
+                                        <input type="text" class="form-control" id="username"
+                                            placeholder="Enter username">
                                     </div>
                                     <div class="mb-3">
                                         <div class="d-flex align-items-start">
@@ -46,8 +48,10 @@
                                         </div>
 
                                         <div class="input-group auth-pass-inputgroup">
-                                            <input type="password" class="form-control" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
-                                            <button class="btn btn-light ms-0" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
+                                            <input type="password" class="form-control" placeholder="Enter password"
+                                                aria-label="Password" aria-describedby="password-addon">
+                                            <button class="btn btn-light ms-0" type="button" id="password-addon"><i
+                                                    class="mdi mdi-eye-outline"></i></button>
                                         </div>
                                     </div>
                                     <div class="row mb-4">
@@ -62,7 +66,8 @@
 
                                     </div>
                                     <div class="mb-3">
-                                        <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Log In</button>
+                                        <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Log
+                                            In</button>
                                     </div>
                                 </form>
 
@@ -73,17 +78,20 @@
 
                                     <ul class="list-inline mb-0">
                                         <li class="list-inline-item">
-                                            <a href="javascript:void()" class="social-list-item bg-primary text-white border-primary">
+                                            <a href="javascript:void()"
+                                                class="social-list-item bg-primary text-white border-primary">
                                                 <i class="mdi mdi-facebook"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a href="javascript:void()" class="social-list-item bg-info text-white border-info">
+                                            <a href="javascript:void()"
+                                                class="social-list-item bg-info text-white border-info">
                                                 <i class="mdi mdi-twitter"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a href="javascript:void()" class="social-list-item bg-danger text-white border-danger">
+                                            <a href="javascript:void()"
+                                                class="social-list-item bg-danger text-white border-danger">
                                                 <i class="mdi mdi-google"></i>
                                             </a>
                                         </li>
@@ -91,13 +99,17 @@
                                 </div>
 
                                 <div class="mt-5 text-center">
-                                    <p class="text-muted mb-0">Don't have an account ? <a href="auth-register.php" class="text-primary fw-semibold"> Signup now </a> </p>
+                                    <p class="text-muted mb-0">Don't have an account ? <a href="auth-register.php"
+                                            class="text-primary fw-semibold"> Signup now </a> </p>
                                 </div>
                             </div>
                             <div class="mt-4 mt-md-5 text-center">
-                                <p class="mb-0">© <script>
+                                <p class="mb-0">©
+                                    <script>
                                         document.write(new Date().getFullYear())
-                                    </script> Minia . Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                                    </script> BMS Bon Management System . Crafted with <i
+                                        class="mdi mdi-heart text-danger"></i> by Afrifood
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -125,10 +137,15 @@
                         <div class="col-xl-7">
                             <div class="p-0 p-sm-4 px-xl-0">
                                 <div id="reviewcarouselIndicators" class="carousel slide" data-bs-ride="carousel">
-                                    <div class="carousel-indicators carousel-indicators-rounded justify-content-start ms-0 mb-0">
-                                        <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                        <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                        <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                    <div
+                                        class="carousel-indicators carousel-indicators-rounded justify-content-start ms-0 mb-0">
+                                        <button type="button" data-bs-target="#reviewcarouselIndicators"
+                                            data-bs-slide-to="0" class="active" aria-current="true"
+                                            aria-label="Slide 1"></button>
+                                        <button type="button" data-bs-target="#reviewcarouselIndicators"
+                                            data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                        <button type="button" data-bs-target="#reviewcarouselIndicators"
+                                            data-bs-slide-to="2" aria-label="Slide 3"></button>
                                     </div>
                                     <!-- end carouselIndicators -->
                                     <div class="carousel-inner">
@@ -146,7 +163,8 @@
                                                 <div class="mt-4 pt-3 pb-5">
                                                     <div class="d-flex align-items-start">
                                                         <div class="flex-shrink-0">
-                                                            <img src="assets/images/users/avatar-1.jpg" class="avatar-md img-fluid rounded-circle" alt="...">
+                                                            <img src="assets/images/users/avatar-1.jpg"
+                                                                class="avatar-md img-fluid rounded-circle" alt="...">
                                                         </div>
                                                         <div class="flex-grow-1 ms-3 mb-4">
                                                             <h5 class="font-size-18 text-white">Richard Drews
@@ -171,7 +189,8 @@
                                                 <div class="mt-4 pt-3 pb-5">
                                                     <div class="d-flex align-items-start">
                                                         <div class="flex-shrink-0">
-                                                            <img src="assets/images/users/avatar-2.jpg" class="avatar-md img-fluid rounded-circle" alt="...">
+                                                            <img src="assets/images/users/avatar-2.jpg"
+                                                                class="avatar-md img-fluid rounded-circle" alt="...">
                                                         </div>
                                                         <div class="flex-grow-1 ms-3 mb-4">
                                                             <h5 class="font-size-18 text-white">Rosanna French
@@ -195,7 +214,8 @@
                                                     feel.”</h4>
                                                 <div class="mt-4 pt-3 pb-5">
                                                     <div class="d-flex align-items-start">
-                                                        <img src="assets/images/users/avatar-3.jpg" class="avatar-md img-fluid rounded-circle" alt="...">
+                                                        <img src="assets/images/users/avatar-3.jpg"
+                                                            class="avatar-md img-fluid rounded-circle" alt="...">
                                                         <div class="flex-1 ms-3 mb-4">
                                                             <h5 class="font-size-18 text-white">Ilse R. Eaton</h5>
                                                             <p class="mb-0 text-white-50">Manager
