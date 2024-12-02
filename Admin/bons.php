@@ -114,6 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
@@ -209,9 +212,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
 
                                                         // Delete Button with FontAwesome icon
                                                         echo "<form method='GET' action='delete_bon.php' style='display:inline-block;' class='delete-form'>";
-                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
-                                                        echo "<button type='button' class='btn btn-sm btn-danger delete-btn'><i class='fas fa-trash-alt'></i></button>";
+                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') . "'>";
+                                                        echo "<button type='button' class='btn btn-sm btn-danger delete-btn' onclick='confirmDelete(this)'>";
+                                                        echo "<i class='fas fa-trash-alt'></i>";
+                                                        echo "</button>";
                                                         echo "</form>";
+                                                                                                          
+                                                        
 
 
                                                         // Print Button with FontAwesome icon
@@ -315,89 +322,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
 
     </script>
 
+<script>
+    function confirmDelete(button) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Find the parent form and submit it
+                button.closest('form').submit();
+            }
+        });
+    }
+</script>
 
-
-
-
-
-    <!-- <script>$(document).ready(function () {
-            // Event listener for the delete button
-            $('.delete-bon').on('click', function () {
-                // Retrieve the bon ID from the data attribute
-                var bon_id = $(this).data('id');
-                $(document).ready(function () {
-
-                    // Display a SweetAlert2 confirmation dialog
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to recover this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, delete it!',
-                        cancelButtonText: 'Cancel',
-                        reverseButtons: true
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Proceed with the deletion via AJAX if the user confirms
-                            $.ajax({
-                                url: 'delete_bon.php', // Backend script to handle deletion
-                                type: 'GET',          // Request method
-                                data: { bon_id: bon_id }, // Data sent to the server
-                                success: function (response) {
-                                    // On successful deletion
-                                    Swal.fire(
-                                        'Deleted!',
-                                        'The bon has been deleted.',
-                                        'success'
-                                    ).then(() => {
-                                        // Reload the page to reflect changes
-                                        location.reload();
-                                    });
-                                },
-                                error: function () {
-                                    // Handle any errors during the deletion process
-                                    Swal.fire(
-                                        'Error!',
-                                        'There was an issue deleting the bon.',
-                                        'error'
-                                    );
-                                }
-                            });
-                        } else {
-                            // If the user cancels the deletion
-                            Swal.fire(
-                                'Cancelled',
-                                'Your bon is safe :)',
-                                'error'
-                            );
-                        }
-                    });
-                });
-            });
-        } -->
-            <script src = "https://cdn.jsdelivr.net/npm/sweetalert2@11" ></scrip>
-    <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                document.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', function (e) {
-                        const form = this.closest('.delete-form'); // Get the form associated with this button
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "You won't be able to revert this!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, delete it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                form.submit(); // Submit the form if confirmed
-                            }
-                        });
-                    });
-                });
-            });
-    </script>
 
 
     <link rel="stylesheet" href="styles.css">
