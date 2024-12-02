@@ -98,11 +98,11 @@
                 </button>
             </div>
 
-            <div class="dropdown d-inline-block">
+            <!-- <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item right-bar-toggle me-2">
                     <i data-feather="settings" class="icon-lg"></i>
                 </button>
-            </div>
+            </div> -->
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown"
@@ -153,76 +153,7 @@
                     </a>
                 </li> -->
 
-                <li>
 
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li>
-                            <a href="apps-calendar.php">
-                                <span data-key="t-calendar"><?php echo $language["Calendar"]; ?></span>
-                            </a>
-                        </li>
-
-                            <?php
-
-
-                            // Include the user role check logic
-                            include_once 'check_user_role.php';
-
-                            // Check if the user is logged in
-                            $is_admin = false;
-                            if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-                                $user_id = $_SESSION["id"];
-                                // Call the isAdmin function to check if the user is an admin
-                                $is_admin = isAdmin($user_id);
-                            }
-                            ?>
-
-                            <li>
-                                <?php if ($is_admin): ?>
-                                    <!-- The link is clickable for admins -->
-                                    <a href="apps-chat.php">
-                                        <span data-key="t-chat"><?php echo $language["Chat"]; ?></span>
-                                    </a>
-                                <?php else: ?>
-                                    <!-- The link is disabled for non-admins -->
-                                    <a href="javascript:void(0);" class="disabled" style="pointer-events: none; color: gray;">
-                                        <span data-key="t-chat"><?php echo $language["Chat"]; ?></span>
-                                    </a>
-                                <?php endif; ?>
-                            </li>
-
-        
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <span data-key="t-email"><?php echo $language["Email"]; ?></span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="apps-email-inbox.php" data-key="t-inbox"><?php echo $language["Inbox"]; ?></a></li>
-                                <li><a href="apps-email-read.php" data-key="t-read-email"><?php echo $language["Read_Email"]; ?></a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <span data-key="t-invoices"><?php echo $language["Invoices"]; ?></span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="apps-invoices-list.php" data-key="t-invoice-list"><?php echo $language["Invoice_List"]; ?></a></li>
-                                <li><a href="apps-invoices-detail.php" data-key="t-invoice-detail"><?php echo $language["Invoice_Detail"]; ?></a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <span data-key="t-contacts"><?php echo $language["Contacts"]; ?></span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="apps-contacts-grid.php" data-key="t-user-grid"><?php echo $language["User_Grid"]; ?></a></li>
-                                <li><a href="apps-contacts-list.php" data-key="t-user-list"><?php echo $language["User_List"]; ?></a></li>
-                                <li><a href="apps-contacts-profile.php" data-key="t-profile"><?php echo $language["Profile"]; ?></a></li>
-                            </ul>
-                        </li>
-
-                    </ul>
-                </li>
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">

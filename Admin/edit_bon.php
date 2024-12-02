@@ -1,5 +1,6 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
+<?php include 'layouts/config.php'?>
 
 <head>
     <title>Edit Bon | Admin Dashboard</title>
