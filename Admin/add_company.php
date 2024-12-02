@@ -1,9 +1,10 @@
+<?php include 'layouts/session.php'; ?>
+<?php include 'layouts/head-main.php'; ?>
+
 <?php
 // Enable error reporting for debugging
 // ini_set('display_errors', 1); // error_reporting(E_ALL);
 
-include 'layouts/session.php';
-include 'layouts/head-main.php';
 include 'layouts/config.php';
 
 if (!$link) {
