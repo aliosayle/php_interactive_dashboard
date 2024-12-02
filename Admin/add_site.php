@@ -39,8 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name'])) {
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
-    <!-- Bootstrap CSS -->
+    <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
+    <!-- <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" /> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -54,17 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name'])) {
                 <div class="container-fluid">
 
                     <!-- Breadcrumb -->
-                    <div class="row">
-                        <div class="col-12">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="dashboard.php" class="breadcrumb-link">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="sites.php" class="breadcrumb-link">Sites</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Add New Site</li>
+                    <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-3">
+                                    <li class="breadcrumb-item"><a href="sites.php">Sites</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        Add New Site
+                                    </li>
                                 </ol>
                             </nav>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-12">
