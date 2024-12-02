@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                                         echo "</form>";
 
 
-                                                        echo "</td>";
+                                                        echo  "</td>";
                                                         echo "</tr>";
                                                     }
                                                 } else {
