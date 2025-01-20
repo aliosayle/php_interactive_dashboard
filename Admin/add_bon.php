@@ -5,6 +5,16 @@
     <title>Add Bon | Admin Dashboard</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
+    <!-- Include Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Include jQuery (required for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+
 </head>
 
 <?php include 'layouts/body.php'; ?>
@@ -150,20 +160,15 @@
 
 
                                             <div class="mb-3">
-                                                <label for="site_id" class="form-label">Site</label>
-                                                <select class="form-select select2" name="site_id" id="site_id"
-                                                    required>
-                                                    <option value="">Select a site</option>
+                                                <label for="site_name" class="form-label">Site Name</label>
+                                                <select class="form-select" id="site_name" name="site_name" required>
+                                                    <option value="" disabled>Select a site</option>
                                                     <?php
                                                     $query = "SELECT id, name FROM sites";
                                                     $result = mysqli_query($link, $query);
-
-                                                    if ($result) {
-                                                        while ($row = mysqli_fetch_assoc($result)) {
-                                                            echo '<option value="' . htmlspecialchars($row['id'], ENT_QUOTES) . '">' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
-                                                        }
-                                                    } else {
-                                                        echo '<option value="">Error fetching sites</option>';
+                                                    while ($site = mysqli_fetch_assoc($result)) {
+                                                        $selected = ($site['id'] == $row['site_id']) ? 'selected' : '';
+                                                        echo "<option value='{$site['id']}' $selected>{$site['name']}</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -224,12 +229,13 @@
 <script src="assets/js/app.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $('.select2').select2({
-            placeholder: "Select a site",
-            allowClear: true
-        });
-    });
+jQuery.noConflict();
+jQuery(document).ready(function($) {
+  // Initialize both select lists with Select2
+  $('#company_name').select2();
+  $('#site_name').select2();
+});
+
 </script>
 
 

@@ -116,6 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css"> -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
 
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
@@ -269,51 +273,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <script src="assets/js/app.js"></script>
     <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="https://cdn.datatables.net/colreorder/1.6.2/js/dataTables.colReorder.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- DataTables core JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    
+    <!-- DataTables Buttons extension -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+</body>
 
 
     <script>
-        $('#datatable').DataTable({
-            "dom": '<"top"Bfr>ltip',
-            "buttons": [
-                {
-                    "extend": 'collection', // This will group the buttons into a dropdown
-                    "text": 'Export', // The text that will appear on the dropdown button
-                    "buttons": [
-                        'copy',
-                        'csv',
-                        'excel',
-                        'pdf'
-                    ]
-                }
-            ],
-            "colReorder": true,
-            "stateSave": true,
-            "lengthMenu": [
-                [10, 25, 50, -1],
-                [10, 25, 50, "All"]
-            ],
-            "columnDefs": [
-                {
-                    "targets": '_all', // Apply to all columns
-                    "width": "150px",   // Set a fixed width
-                    "className": "dt-center"
-                }
-            ],
-            "initComplete": function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var columnHeader = $(column.header());
-                    var columnIndex = column.index();
-
-                    column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>');
-                    });
-                });
-            }
-        });
-
-
+$(document).ready(function () {
+    $('#datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: 'fetch_bons.php', // The server-side script URL
+            type: 'POST' // HTTP method to fetch data
+        },
+        columns: [
+            { data: 'reference' },
+            { data: 'beneficier_name' },
+            { data: 'date_of_bon' },
+            { data: 'total_one' },
+            { data: 'total_two' },
+            { data: 'currency_one' },
+            { data: 'currency_two' },
+            { data: 'amount_in_lettres' },
+            { data: 'site_name' },
+            { data: 'company_name' },
+            { data: 'motif' },
+            { data: 'account_number' },
+            { data: 'is_voided' },
+            { data: 'comments' },
+            { data: 'actions' }
+        ]
+    });
+});
 
 
 
