@@ -102,7 +102,7 @@
                         } else {
                             echo "Guest"; // Default name if no user is logged in
                         }
-                        ?>.
+                        ?>
                     </span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>

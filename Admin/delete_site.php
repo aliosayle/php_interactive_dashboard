@@ -27,17 +27,19 @@ $permission_query = "SELECT candelete FROM users WHERE id = '$user_id'";
 $permission_result = mysqli_query($link, $permission_query);
 $permissions = mysqli_fetch_assoc($permission_result);
 
-// Check if permission to delete exists
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_id']) && $permissions['candelete'] == 1) {
-    $site_id = mysqli_real_escape_string($link, $_POST['site_id']);
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']) && $permissions['candelete'] == 1) {
+    $site_id = mysqli_real_escape_string($link, $_GET['id']);
     
     $delete_query = "DELETE FROM sites WHERE id = '$site_id'";
     if (mysqli_query($link, $delete_query)) {
-        echo 'success';
+        $_SESSION['delete_message'] = "site deleted successfully.";
     } else {
-        echo 'error';
+        $_SESSION['delete_message'] = "Error deleting site: " . mysqli_error($link);
     }
 } else {
-    echo 'permission_denied';
+    $_SESSION['delete_message'] = "You do not have permission to delete sites.";
 }
+
+header("Location: sites.php");
+exit();
 ?>

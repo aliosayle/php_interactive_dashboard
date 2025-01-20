@@ -34,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sequence_reference = $_POST['sequence_reference'];
     $user_id = $_POST['user_id'];
     $user_name = $_POST['user_name'];
-    $company_name = $_POST['company_name'];
-    $site_name = $_POST['site_name'];
+    $company_id = $_POST['company_id'];
+    $site_id = $_POST['site_id'];
     $date_of_bon = $_POST['date'];
     $total_one = $_POST['amoun_1'];
     $currency_one = $_POST['currency_1'];
@@ -147,42 +147,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     . "\n### ### ###\n"
     . numberToWordsFrench($total_two) . ' ' . $currency_two;
 
-// Get actual values from $_POST or use them directly in the print statement
-$query = "SELECT id FROM sites WHERE site_name = '$site_name'";
-$result = mysqli_query($link, $query);
 
-if ($result) {
-    // Fetch the result as an associative array
-    $row = mysqli_fetch_assoc($result);
-
-    // Store the id in $site_id
-    $site_id = $row['id'] ?? null; // If no result, $site_id will be null
-} else {
-    // Handle query error
-    echo "Error: " . mysqli_error($link);
-}
-
-
-$query = "SELECT company_name FROM companies WHERE id = '$company_name'";
-$result = mysqli_query($link, $query);
-
-if ($result) {
-    // Fetch the result as an associative array
-    $row = mysqli_fetch_assoc($result);
-
-    // Store the id in $site_id
-    $company_id = $company_name;
-    $company_name = $row['company_name'] ?? null; // If no result, $company_id will be null
-} else {
-    // Handle query error
-    echo "Error: " . mysqli_error($link);
-}
 
 $sql = "INSERT INTO bon 
-        (reference, sequence_reference, user_id, username, company_id, company_name, site_id, date_of_bon, 
+        (reference, sequence_reference, user_id, username, company_id, site_id, date_of_bon, 
         total_one, total_two, currency_one, currency_two, amount_in_lettres, beneficier_name, motif, account_number, 
         is_voided, comments) 
-        VALUES ('$reference', '$sequence_reference', '$user_id', '$user_name', '$company_id', '$company_name', 
+        VALUES ('$reference', '$sequence_reference', '$user_id', '$user_name', '$company_id', 
         '$site_id', '$date_of_bon', '$total_one', '$total_two', '$currency_one', '$currency_two', 
         '$amount_in_lettres', '$beneficier_name', '$motive', '$account_number', '$is_voided', '$comments')";
 

@@ -120,14 +120,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                 <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
-                                            <th><?php echo translate('auto_number', $lang); ?></th>
-                                            <th><?php echo translate('company_name', $lang); ?></th>
-                                            <th><?php echo translate('actions', $lang); ?></th>
+                                            <th>Name</th>
+                                            <th>Created At</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php 
-                                        $query = "SELECT id, autonumber, company_name FROM companies"; 
+                                        $query = "SELECT * FROM companies"; 
                                         $result = mysqli_query($link, $query);
                                         if (!$result) { 
                                             die("Query failed: " . mysqli_error($link)); 
@@ -135,8 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['company_name']) && $p
                                         if (mysqli_num_rows($result) > 0) {
                                             while ($row = mysqli_fetch_assoc($result)) {
                                                 echo "<tr>";
-                                                echo "<td>" . htmlspecialchars($row['autonumber']) . "</td>";
-                                                echo "<td>" . htmlspecialchars($row['company_name']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                                                 echo "<td class='text-center'>";
 
                                                 // Edit Button

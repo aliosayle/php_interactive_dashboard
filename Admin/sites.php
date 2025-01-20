@@ -20,11 +20,11 @@ $translations = [
     ],
     'fr' => [
         'dashboard' => 'Tableau de bord',
-        'sites' => 'Sites',
-        'sites_table' => 'Tableau des sites',
-        'add_new_site' => 'Ajouter un nouveau site',
+        'sites' => 'Entreprises',
+        'sites_table' => 'Tableau des entreprises',
+        'add_new_site' => 'Ajouter une nouvelle entreprise',
         'auto_number' => 'Numéro automatique',
-        'site_name' => 'Nom du site',
+        'site_name' => 'Nom de l\'entreprise',
         'actions' => 'Actions',
         'no_data_found' => 'Aucune donnée trouvée'
     ]
@@ -34,11 +34,11 @@ $translations = [
 $lang = isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'fr']) ? $_GET['lang'] : 'en';
 
 // Replace text based on the selected language
-function translate($key, $lang)
-{
+function translate($key, $lang) {
     global $translations;
     return $translations[$lang][$key] ?? $translations['en'][$key]; // Fallback to English if key is not found
 }
+
 
 if (!$link) {
     die("Connection not established: " . mysqli_connect_error());
@@ -76,97 +76,91 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name']) && $perm
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>Sites Table | Admin Template</title>
     <?php include 'layouts/head.php'; ?>
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
+    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <?php include 'layouts/head-style.php'; ?>
+
+
 </head>
 
 <body>
-    <?php include 'layouts/body.php'; ?>
+<?php include 'layouts/body.php'; ?>
 
-    <div id="layout-wrapper">
-        <?php include 'layouts/menu.php'; ?>
-        <div class="main-content">
-            <div class="page-content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-3">
-                                    <li class="breadcrumb-item">Login</li>
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        <?php echo translate('sites', $lang); ?>
-                                    </li>
-                                </ol>
-                            </nav>
-                            <div class="card">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h4 class="card-title"><?php echo translate('sites_table', $lang); ?></h4>
-                                </div>
-                                <div class="card-body">
-                                    <form method="POST" action="add_site.php" class="mb-4">
-                                        <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0)
-                                            echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
-                                            <i class="fas fa-plus me-2"></i>
-                                            <?php echo translate('add_new_site', $lang); ?>
-                                        </button>
-                                    </form>
+<div id="layout-wrapper">
+    <?php include 'layouts/menu.php'; ?>
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-3">
+                                <li class="breadcrumb-item">Login</li>
+                                <li class="breadcrumb-item active" aria-current="page"><?php echo translate('sites', $lang); ?></li>
+                            </ol>
+                        </nav>
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title"><?php echo translate('sites_table', $lang); ?></h4>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="add_site.php" class="mb-4">
+                                    <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0) echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
+                                        <i class="fas fa-plus me-2"></i> <?php echo translate('add_new_site', $lang); ?>
+                                    </button>
+                                </form>
 
-                                    <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                                <th><?php echo translate('auto_number', $lang); ?></th>
-                                                <th><?php echo translate('site_name', $lang); ?></th>
-                                                <th><?php echo translate('actions', $lang); ?></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $query = "SELECT id, autonumber, site_name FROM sites";
-                                            $result = mysqli_query($link, $query);
-                                            if (!$result) {
-                                                die("Query failed: " . mysqli_error($link));
-                                            }
-                                            if (mysqli_num_rows($result) > 0) {
-                                                while ($row = mysqli_fetch_assoc($result)) {
-                                                    echo "<tr>";
-                                                    echo "<td>" . htmlspecialchars($row['autonumber']) . "</td>";
-                                                    echo "<td>" . htmlspecialchars($row['site_name']) . "</td>";
-                                                    echo "<td class='text-center'>";
+                                <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Created At</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        $query = "SELECT * FROM sites"; 
+                                        $result = mysqli_query($link, $query);
+                                        if (!$result) { 
+                                            die("Query failed: " . mysqli_error($link)); 
+                                        }
+                                        if (mysqli_num_rows($result) > 0) {
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo "<tr>";
+                                                echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+                                                echo "<td class='text-center'>";
 
-                                                    // Edit Button
-                                                    echo "<form method='POST' action='edit_site.php' style='display:inline-block;'>";
-                                                    echo "<input type='hidden' name='site_id' value='" . htmlspecialchars($row['id']) . "'>";
-                                                    echo "<button type='submit' class='btn btn-success btn-sm action-button' " . ($permissions['canedit'] == 0 ? 'style="pointer-events: none; opacity: 0.6;"' : '') . ">
+                                                // Edit Button
+                                                echo "<form method='POST' action='edit_site.php' style='display:inline-block;'>";
+                                                echo "<input type='hidden' name='site_id' value='" . htmlspecialchars($row['id']) . "'>";
+                                                echo "<button type='submit' class='btn btn-success btn-sm action-button' " . ($permissions['canedit'] == 0 ? 'style="pointer-events: none; opacity: 0.6;"' : '') . ">
                                                         <i class='mdi mdi-pencil d-block font-size-16'></i>
                                                       </button>";
-                                                    echo "</form>";
+                                                echo "</form>";
 
-                                                    // Delete Button with SweetAlert
-                                                    echo "<button type='button' class='btn btn-danger btn-sm action-button sa-warning' data-id='" . htmlspecialchars($row['id']) . "' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . ">
+                                                // Delete Button with SweetAlert
+                                                echo "<button type='button' class='btn btn-danger btn-sm action-button sa-warning' data-id='" . htmlspecialchars($row['id']) . "' " . ($permissions['candelete'] == 0 ? 'disabled' : '') . ">
                                                         <i class='mdi mdi-trash-can d-block font-size-16'></i>
                                                       </button>";
 
-                                                    echo "</td>";
-                                                    echo "</tr>";
-                                                }
-                                            } else {
-                                                echo "<tr><td colspan='3'>" . translate('no_data_found', $lang) . "</td></tr>";
+                                                echo "</td>";
+                                                echo "</tr>";
                                             }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        } else {
+                                            echo "<tr><td colspan='3'>" . translate('no_data_found', $lang) . "</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -174,81 +168,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name']) && $perm
             </div>
         </div>
     </div>
+</div>
 
     <?php include 'layouts/footer.php'; ?>
-    </div>
+</div>
 
-    <?php include 'layouts/vendor-scripts.php'; ?>
+<?php include 'layouts/vendor-scripts.php'; ?>
 
-    <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-    <script src="assets/libs/jszip/jszip.min.js"></script>
-    <script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
-    <script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
-    <script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-    <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
-    <script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="assets/js/pages/dashboard.init.js"></script>
-    <script src="assets/js/app.js"></script>
-    <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
-    <script>
-        $(document).on('click', '.sa-warning', function (e) {
+<script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+<script src="assets/libs/jszip/jszip.min.js"></script>
+<script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
+<script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
+<script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+<script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
+<script src="assets/js/pages/dashboard.init.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#datatable').DataTable({
+            "searching": true,
+            "paging": true,
+            "info": true,
+            "responsive": true
+        });
+
+        // SweetAlert for delete button
+        $('.sa-warning').on('click', function () {
             var siteId = $(this).data('id');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            }).then(function (result) {
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
                 if (result.isConfirmed) {
-                    $.ajax({
-                        url: 'delete_site.php',
-                        type: 'POST',
-                        data: { site_id: siteId },
-                        success: function (response) {
-                            if (response === 'success') {
-                                Swal.fire('Deleted!', 'Your record has been deleted.', 'success').then(function () {
-                                    // Reload the page after the success message
-                                    location.reload();
-                                });
-                            }
-                        },
-                        complete: function () {
-                            // Ensure page reload after any AJAX call ends (in case of failure as well)
-                            location.reload();
-                        }
-                    });
+                    window.location.href = 'delete_site.php?id=' + siteId;
                 }
-            });
+            })
         });
-    </script>
+    });
+</script>
 
-    <script>
-        $(document).ready(function () {
-            $('#datatable').DataTable({
-                "searching": true,  // Enable searching
-                "paging": true,     // Enable pagination
-                "info": true,       // Show info text (e.g., "Showing 1 to 10 of 50 entries")
-                "responsive": true  // Make the table responsive
-            });
-        });
-    </script>
+<link rel="stylesheet" href="styles.css">
 
-    <link rel="stylesheet" href="styles.css">
 
 </body>
-
 </html>

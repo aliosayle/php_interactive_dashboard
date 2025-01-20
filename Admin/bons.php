@@ -159,7 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                         <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                                             <thead>
                                                 <tr>
-                                                    <th><?php echo translate('id', $lang); ?></th>
                                                     <th><?php echo translate('reference', $lang); ?></th>
                                                     <th><?php echo translate('beneficier_name', $lang); ?></th>
                                                     <th><?php echo translate('date_of_bon', $lang); ?></th>
@@ -187,7 +186,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                                 if (mysqli_num_rows($result) > 0) {
                                                     while ($row = mysqli_fetch_assoc($result)) {
                                                         echo "<tr>";
-                                                        echo "<td>" . htmlspecialchars($row['id']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['reference']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['beneficier_name']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['date_of_bon']) . "</td>";
@@ -196,8 +194,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                                         echo "<td>" . htmlspecialchars($row['currency_one']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['currency_two']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['amount_in_lettres']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT site_name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['site_name']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT company_name FROM companies WHERE id='" . mysqli_real_escape_string($link, $row['company_id']) . "'"))['company_name']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['name']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM companies WHERE id='" . mysqli_real_escape_string($link, $row['company_id']) . "'"))['name']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['account_number']) . "</td>";
                                                         echo "<td>" . ($row['is_voided'] == 1 ? 'Yes' : 'No') . "</td>";
@@ -222,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
 
 
                                                         // Print Button with FontAwesome icon
-                                                        echo "<form method='POST' action='print_bon.php' style='display:inline-block;'>";
+                                                        echo "<form method='POST' action='design.php' style='display:inline-block;'>";
                                                         echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
                                                         echo "<button type='submit' class='btn btn-sm btn-secondary'><i class='fas fa-print'></i></button>";
                                                         echo "</form>";

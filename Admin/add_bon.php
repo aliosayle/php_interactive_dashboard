@@ -24,14 +24,14 @@
                 <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
-                    <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item">Login</li>
-                                    <li class="breadcrumb-item"><a href="Companies.php">Companies</a></li>
-                                    <li class="breadcrumb-item active">Add New Company</li>
-                                </ol>
-                            </div>
-                            <br>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item">Login</li>
+                                <li class="breadcrumb-item"><a href="bons.php">Bons</a></li>
+                                <li class="breadcrumb-item active">Add New Bon</li>
+                            </ol>
+                        </div>
+                        <br>
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                             <h4 class="mb-sm-0 font-size-18">Add New Bon</h4>
 
@@ -73,22 +73,19 @@
                                                     required>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="company_name" class="form-label">Company Name</label>
-                                                <select class="form-select" id="company_name" name="company_name" required>
+                                                <label for="company_id" class="form-label">Company Name</label>
+                                                <select class="form-select" id="company_id" name="company_id" required>
                                                     <option value="" disabled selected>Select a company</option>
                                                     <?php
                                                     include 'layouts/config.php';
-                                                    $query = "SELECT id, company_name FROM companies";
+                                                    $query = "SELECT id, name FROM companies";
                                                     $result = mysqli_query($link, $query);
                                                     while ($row = mysqli_fetch_assoc($result)) {
-                                                        echo "<option value='{$row['id']}'>{$row['company_name']}</option>";
+                                                        echo "<option value='{$row['id']}'>{$row['name']}</option>";
                                                     }
                                                     ?>
                                                 </select>
                                             </div>
-
-                                            <!-- Hidden Field for Company ID -->
-                                            <input type="hidden" id="company_id" name="company_id" required>
 
 
 
@@ -122,9 +119,8 @@
                                             <div class="mb-3">
                                                 <label for="currency_2" class="form-label">Currency 2</label>
                                                 <select class="form-select" name="currency_2" id="currency_2">
-                                                    <option value="USD" <?php echo ($currency_2 == 'USD') ? 'selected' : ''; ?>>USD</option>
-                                                    <option value="EUR" <?php echo ($currency_2 == 'EUR') ? 'selected' : ''; ?>>EUR</option>
                                                     <option value="CF" <?php echo ($currency_2 == 'CF') ? 'selected' : ''; ?>>CF</option>
+                                                    <option value="EUR" <?php echo ($currency_2 == 'EUR') ? 'selected' : ''; ?>>EUR</option>
                                                     <!-- Add other currencies as needed -->
                                                 </select>
                                             </div>
@@ -154,16 +150,17 @@
 
 
                                             <div class="mb-3">
-                                                <label for="site_name" class="form-label">Site</label>
-                                                <select class="form-select select2" name="site_name" id="site_name" required>
+                                                <label for="site_id" class="form-label">Site</label>
+                                                <select class="form-select select2" name="site_id" id="site_id"
+                                                    required>
                                                     <option value="">Select a site</option>
                                                     <?php
-                                                    $query = "SELECT site_name FROM sites";
+                                                    $query = "SELECT id, name FROM sites";
                                                     $result = mysqli_query($link, $query);
 
                                                     if ($result) {
                                                         while ($row = mysqli_fetch_assoc($result)) {
-                                                            echo '<option value="' . htmlspecialchars($row['site_name'], ENT_QUOTES) . '">' . htmlspecialchars($row['site_name'], ENT_QUOTES) . '</option>';
+                                                            echo '<option value="' . htmlspecialchars($row['id'], ENT_QUOTES) . '">' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
                                                         }
                                                     } else {
                                                         echo '<option value="">Error fetching sites</option>';
@@ -193,8 +190,8 @@
 
                                             <div class="mb-3">
                                                 <label for="paid_by" class="form-label">Beneficier Name</label>
-                                                <input class="form-control" type="text" name="beneficier_name" id="beneficier_name"
-                                                    required>
+                                                <input class="form-control" type="text" name="beneficier_name"
+                                                    id="beneficier_name" required>
                                             </div>
                                         </div>
                                     </div>
@@ -224,8 +221,10 @@
 
 <!-- JAVASCRIPT -->
 <?php include 'layouts/vendor-scripts.php'; ?>
+<script src="assets/js/app.js"></script>
+
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.select2').select2({
             placeholder: "Select a site",
             allowClear: true
@@ -233,7 +232,6 @@
     });
 </script>
 
-<script src="assets/js/app.js"></script>
 
 </body>
 
