@@ -4,7 +4,7 @@ include 'layouts/config.php'; // Your DB connection
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Query to fetch sites based on search term
-$query = "SELECT id, site_name FROM sites WHERE site_name LIKE '%$search%' LIMIT 10";
+$query = "SELECT id, name FROM sites WHERE name LIKE '%$search%' LIMIT 10";
 $result = mysqli_query($link, $query);
 $items = [];
 

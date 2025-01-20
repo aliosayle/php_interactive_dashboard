@@ -1,6 +1,6 @@
 <?php
 // Set a unique session name for this system
-session_name("bon_system"); // Change "system1_session" to something unique for each system
+session_name("bon_session"); // Change "system1_session" to something unique for each system
 
 // Initialize the session
 if (session_status() === PHP_SESSION_NONE) {
