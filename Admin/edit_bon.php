@@ -1,76 +1,24 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 <?php include 'layouts/config.php'?>
-
+<?php 
+//enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+?>
 <head>
     <title>Edit Bon | Admin Dashboard</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <link rel="stylesheet" href="components/db_lookup_component.css"> -->
-    <!-- <script src="components/db_lookup_component.js"></script> -->
-<!-- <link rel="stylesheet" href="components/db_lookup_component.css"> -->
-<!-- <script src="components/db_lookup_component.js"></script> -->
-
-<!-- Include select2 CSS -->
+<!-- Include Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 
-<!-- Include select2 JS -->
+<!-- Include jQuery (required for Select2) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
-<script>
-var $j = jQuery.noConflict();
-$j(document).ready(function() {
-    $j('#site_name').select2({
-        placeholder: 'Search for a site',
-        minimumInputLength: 2,
-        ajax: {
-            url: 'fetch_sites.php',
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                console.log('Search query:', params.term);
-                return { search: params.term };
-            },
-            processResults: function (data) {
-                return {
-                    results: data.items.map(function(item) {
-                        return {
-                            id: item.id,
-                            text: item.site_name
-                        };
-                    })
-                };
-            }
-        }
-    });
-
-    $j('#company_name').select2({
-        placeholder: "Search for a company", 
-        allowClear: true,
-        ajax: {
-            url: 'fetch_companies.php',
-            dataType: 'json',
-            delay: 250, 
-            data: function (params) {
-                return { search: params.term };
-            },
-            processResults: function (data) {
-                return {
-                    results: data.items.map(function (item) {
-                        return {
-                            id: item.id,
-                            text: item.company_name
-                        };
-                    })
-                };
-            },
-            cache: true
-        }
-    });
-});
-
-</script>
 
 
 </head>
@@ -170,11 +118,11 @@ $j(document).ready(function() {
                                                 <select class="form-select" id="company_name" name="company_name" required>
                                                     <option value="" disabled>Select a company</option>
                                                     <?php
-                                                    $query = "SELECT id, company_name FROM companies";
+                                                    $query = "SELECT id, name FROM companies";
                                                     $result = mysqli_query($link, $query);
                                                     while ($company = mysqli_fetch_assoc($result)) {
                                                         $selected = ($company['id'] == $row['company_id']) ? 'selected' : '';
-                                                        echo "<option value='{$company['id']}' $selected>{$company['company_name']}</option>";
+                                                        echo "<option value='{$company['id']}' $selected>{$company['name']}</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -237,11 +185,11 @@ $j(document).ready(function() {
                                                 <select class="form-select" id="site_name" name="site_name" required>
                                                     <option value="" disabled>Select a site</option>
                                                     <?php
-                                                    $query = "SELECT id, site_name FROM sites";
+                                                    $query = "SELECT id, name FROM sites";
                                                     $result = mysqli_query($link, $query);
                                                     while ($site = mysqli_fetch_assoc($result)) {
                                                         $selected = ($site['id'] == $row['site_id']) ? 'selected' : '';
-                                                        echo "<option value='{$site['id']}' $selected>{$site['site_name']}</option>";
+                                                        echo "<option value='{$site['id']}' $selected>{$site['name']}</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -273,6 +221,8 @@ $j(document).ready(function() {
                                                     value="<?php echo htmlspecialchars($row['beneficier_name']); ?>" required>
                                             </div>
 
+
+
                                     </div>
 
                                     <div class="mt-4 d-flex justify-content-end">
@@ -293,6 +243,19 @@ $j(document).ready(function() {
     <!-- End main content -->
 </div>
 <!-- END layout-wrapper -->
+
+<script>
+
+jQuery.noConflict();
+jQuery(document).ready(function($) {
+  // Initialize both select lists with Select2
+  $('#company_name').select2();
+  $('#site_name').select2();
+});
+
+
+</script>
+
 
 <?php include 'layouts/right-sidebar.php'; ?>
 <?php include 'layouts/vendor-scripts.php'; ?>
