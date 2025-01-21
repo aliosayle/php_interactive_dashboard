@@ -57,7 +57,7 @@ $translations = [
 ];
 
 // Set the default language
-$lang = isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'fr']) ? $_GET['lang'] : 'en';
+$lang = isset($_SESSION['lang']) && in_array($_SESSION['lang'], ['en', 'fr']) ? $_SESSION['lang'] : 'en';
 
 // Replace text based on the selected language
 function translate($key, $lang)
@@ -116,10 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css"> -->
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
-
 
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
@@ -170,7 +166,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                                     <th><?php echo translate('total_two', $lang); ?></th>
                                                     <th><?php echo translate('currency_one', $lang); ?></th>
                                                     <th><?php echo translate('currency_two', $lang); ?></th>
-                                                    <th><?php echo translate('amount_in_lettres', $lang); ?></th>
                                                     <th><?php echo translate('site_name', $lang); ?></th>
                                                     <th>Company Name</th>
                                                     <th><?php echo translate('motif', $lang); ?></th>
@@ -197,7 +192,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                                         echo "<td>" . htmlspecialchars($row['total_two']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['currency_one']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['currency_two']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['amount_in_lettres']) . "</td>";
                                                         echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['name']) . "</td>";
                                                         echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM companies WHERE id='" . mysqli_real_escape_string($link, $row['company_id']) . "'"))['name']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
@@ -273,50 +267,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <script src="assets/js/app.js"></script>
     <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="https://cdn.datatables.net/colreorder/1.6.2/js/dataTables.colReorder.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <!-- DataTables core JS -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    
-    <!-- DataTables Buttons extension -->
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
-</body>
+
 
 
     <script>
-$(document).ready(function () {
-    $('#datatable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: 'fetch_bons.php', // The server-side script URL
-            type: 'POST' // HTTP method to fetch data
-        },
-        columns: [
-            { data: 'reference' },
-            { data: 'beneficier_name' },
-            { data: 'date_of_bon' },
-            { data: 'total_one' },
-            { data: 'total_two' },
-            { data: 'currency_one' },
-            { data: 'currency_two' },
-            { data: 'amount_in_lettres' },
-            { data: 'site_name' },
-            { data: 'company_name' },
-            { data: 'motif' },
-            { data: 'account_number' },
-            { data: 'is_voided' },
-            { data: 'comments' },
-            { data: 'actions' }
-        ]
-    });
+$('#datatable').DataTable({
+    "dom": '<"top"Bfr>ltip',
+    "buttons": [
+        {
+            "extend": 'collection',
+            "text": 'Export',
+            "buttons": [
+                'copy',
+                'csv',
+                'excel',
+                'pdf'
+            ]
+        }
+    ],
+
+    "lengthMenu": [
+        [10, 25, 50, -1],
+        [10, 25, 50, "All"]
+    ],
+    "columnDefs": [
+        {
+            "targets": '_all',
+            "width": "150px",
+            "className": "dt-center"
+        }
+    ],
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": "fetch_bons.php", // Path to your PHP script
+        "type": "POST",
+        "data": function(d) {
+            // Use the search term provided by DataTables
+            d.searchValue = d.search.value; // Pass search value (d.search.value) directly
+        }
+    },
+    "columns": [
+        { "data": "reference" },
+        { "data": "beneficier_name" },
+        { "data": "date_of_bon" },
+        { "data": "total_one" },
+        { "data": "total_two" },
+        { "data": "currency_one" },
+        { "data": "currency_two" },
+        { "data": "site_name" },
+        { "data": "company_name" },
+        { "data": "motif" },
+        { "data": "account_number" },
+        { "data": "is_voided" },
+        { "data": "comments" },
+        { "data": "actions" }
+    ]
 });
 
 
+</script>
 
-
-    </script>
 
 <script>
     function confirmDelete(button) {

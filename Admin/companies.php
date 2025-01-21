@@ -31,7 +31,7 @@ $translations = [
 ];
 
 // Set the default language
-$lang = isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'fr']) ? $_GET['lang'] : 'en';
+$lang = isset($_SESSION['lang']) && in_array($_SESSION['lang'], ['en', 'fr']) ? $_SESSION['lang'] : 'en';
 
 // Replace text based on the selected language
 function translate($key, $lang) {

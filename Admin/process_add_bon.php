@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 // Start session
-session_start();
+include 'layouts/session.php';
 // Include database configuration
 include 'layouts/config.php';
 

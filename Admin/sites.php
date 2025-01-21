@@ -20,18 +20,18 @@ $translations = [
     ],
     'fr' => [
         'dashboard' => 'Tableau de bord',
-        'sites' => 'Entreprises',
-        'sites_table' => 'Tableau des entreprises',
-        'add_new_site' => 'Ajouter une nouvelle entreprise',
+        'sites' => 'Sites',
+        'sites_table' => 'Tableau des Sites',
+        'add_new_site' => 'Ajouter une nouvelle Sites',
         'auto_number' => 'Numéro automatique',
-        'site_name' => 'Nom de l\'entreprise',
+        'site_name' => 'Nom de le Site',
         'actions' => 'Actions',
         'no_data_found' => 'Aucune donnée trouvée'
     ]
 ];
 
 // Set the default language
-$lang = isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'fr']) ? $_GET['lang'] : 'en';
+$lang = isset($_SESSION['lang']) && in_array($_SESSION['lang'], ['en', 'fr']) ? $_SESSION['lang'] : 'en';
 
 // Replace text based on the selected language
 function translate($key, $lang) {

@@ -62,18 +62,20 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
 
-                    <!-- item-->
-                    <a href="?lang=en" class="dropdown-item notify-item language">
-                        <img src="assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12"> <span
-                            class="align-middle"> English </span>
-                    </a>
+<!-- item -->
+<a href="?lang=en" class="dropdown-item notify-item language" onclick="document.location.href='set_lang.php?lang=en';">
+    <img src="assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12">
+    <span class="align-middle"> English </span>
+</a>
 
-                    <!-- item-->
-                    <a href="?lang=fr" class="dropdown-item notify-item language">
-                        <img src="assets/images/flags/france.jpg" alt="user-image" class="me-1" height="12"> <span
-                            class="align-middle"> French </span>
-                    </a>
-                </div>
+<!-- item -->
+<a href="?lang=fr" class="dropdown-item notify-item language" onclick="document.location.href='set_lang.php?lang=fr';">
+    <img src="assets/images/flags/france.jpg" alt="user-image" class="me-1" height="12">
+    <span class="align-middle"> French </span>
+</a>
+
+</div>
+
             </div>
 
             <div class="dropdown d-none d-sm-inline-block">
@@ -141,11 +143,28 @@
                         <i data-feather="users"></i>
                         <span data-key="t-authentication">Apps</span>
                     </a>
+                    
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="sites.php" data-key="t-data-tables">Sites</a></li>
-                        <li><a href="companies.php" data-key="t-data-tables">Companies</a></li>
-                        <li><a href="bons.php" data-key="t-lock-screen">Bons</a></li>
-                    </ul>
+    <li>
+        <a href="sites.php" data-key="t-data-tables">
+            <i class="fas fa-map-marker-alt me-2" style="font-size: 16px;"></i> 
+            <?= $lang == 'fr' ? 'Sites' : 'Sites' ?>
+        </a>
+    </li>
+    <li>
+        <a href="companies.php" data-key="t-data-tables">
+            <i class="fas fa-building me-2" style="font-size: 16px;"></i> 
+            <?= $lang == 'fr' ? 'Entreprises' : 'Companies' ?>
+        </a>
+    </li>
+    <li>
+        <a href="bons.php" data-key="t-lock-screen">
+            <i class="fas fa-file-invoice me-2" style="font-size: 16px;"></i> 
+            <?= $lang == 'fr' ? 'Bons' : 'Bons' ?>
+        </a>
+    </li>
+</ul>
+
                 </li>
             </ul>
         </div>
