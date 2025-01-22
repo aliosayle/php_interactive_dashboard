@@ -1,4 +1,7 @@
 <?php
+// Set the session name to match the login session
+session_name("bon_session");
+
 // Initialize the session
 session_start();
 
