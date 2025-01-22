@@ -28,27 +28,27 @@ $data = mysqli_fetch_assoc($result);
         <div style="left:39px;top:39px;width:717px;height:1046px;"></div>
         <div class="s11" style="left:38px;top:38px;width:717px;height:1046px;"></div>
         <div class="s12" style="left:191px;top:57px;width:412px;height:25px;"><b>BON A PAYER Nº</b>
-            &nbsp;<?php echo $data['reference'] ?? ''; ?></div>
+        <u>    &nbsp;<?php echo $data['reference'] ?? ''; ?></div></u>
         <div class="s13" style="left:77px;top:113px;width:44px;height:18px;">Sté :</div>
-        <div class="s14" style="left:125px;top:113px;width:261px;height:18px;">
-        <?php 
+      <div class="s14" style="left:125px;top:113px;width:261px;height:18px;">
+      <u>   <?php 
 $company_id = $data['company_id'] ?? '';
 if (!empty($company_id)) {
     $query = "SELECT name FROM companies WHERE id = ?";
     $stmt = mysqli_prepare($link, $query);
-    mysqli_stmt_bind_param($stmt, 'i', $company_id);
+    mysqli_stmt_bind_param($stmt, 's', $company_id);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $company_name);
     mysqli_stmt_fetch($stmt);
     echo $company_name ?? '';
     mysqli_stmt_close($stmt);
 }
-?>
+?></u>
 </div>
 
         <div class="s13" style="left:404px;top:113px;width:44px;height:18px;">Site :</div>
         <div class="s14" style="left:452px;top:113px;width:260px;height:18px;">
-            <?php
+            <u><?php
             if (!empty($data['site_id'])) {
                 // Prepare and execute the query to fetch the site name
                 $site_id = $data['site_id'];
@@ -68,7 +68,7 @@ if (!empty($company_id)) {
             } else {
                 echo 'No Site ID';
             }
-            ?>
+            ?></u>
         </div>
         <div class="s13" style="left:87px;top:189px;width:111px;height:18px;">Order Ref # :</div>
         <div class="s12" style="left:202px;top:189px;width:180px;height:18px;">
@@ -90,22 +90,28 @@ if (!empty($company_id)) {
 
         <!-- Amount Two and Currency Two -->
         <div class="s12" style="left:519px;top:228px;width:142px;height:24px;">
-            ##<b><?php echo number_format($data['total_two'] ?? 0, 2); ?></b>##
-        </div>
-        <div class="s16" style="left:662px;top:228px;width:56px;height:24px;">
-            <?php echo $data['currency_two'] ?? ''; ?>
-        </div>
+    ##<b>
+        <?php 
+            echo ($data['amount_two'] ?? 0) == 0 ? '#######' : number_format($data['total_two'] ?? 0, 2); 
+        ?>
+    </b>##
+</div>
+<div class="s16" style="left:662px;top:228px;width:56px;height:24px;">
+    <?php 
+        echo ($data['amount_two'] ?? 0) == 0 ? '##' : ($data['currency_two'] ?? ''); 
+    ?>
+</div>
 
         <div class="s13" style="left:68px;top:299px;width:176px;height:17px;">Nom du Bénéficiare :</div>
         <div class="s14" style="left:248px;top:299px;width:468px;height:17px;">
-            <?php echo $data['beneficier_name'] ?? ''; ?></div>
+           <u> <?php echo $data['beneficier_name'] ?? ''; ?></u></div>
         <div class="s13" style="left:68px;top:340px;width:176px;height:18px;">Montant en lettres :</div>
         <!-- Amount in Letters with Hashtag Signs -->
         <div class="s14" style="left:248px;top:340px;width:466px;height:94px;">
-            ##<?php echo htmlspecialchars($data['amount_in_lettres'] ?? '', ENT_QUOTES, 'UTF-8'); ?>##
+           <u> ##<?php echo htmlspecialchars($data['amount_in_lettres'] ?? '', ENT_QUOTES, 'UTF-8'); ?>##</u>
         </div>
         <div class="s13" style="left:68px;top:461px;width:176px;height:18px;">Motif :</div>
-        <div class="s14" style="left:248px;top:461px;width:466px;height:75px;"><?php echo $data['motif'] ?? ''; ?></div>
+        <div class="s14" style="left:248px;top:461px;width:466px;height:75px;"><u><?php echo $data['motif'] ?? ''; ?></u></div>
         <div class="s13" style="left:68px;top:548px;width:176px;height:18px;">Commentaires :</div>
         <div class="s14" style="left:248px;top:548px;width:466px;height:75px;"><?php echo $data['comments'] ?? ''; ?>
         </div>

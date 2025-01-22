@@ -5,24 +5,46 @@ ini_set('display_errors', 1);
 include 'layouts/session.php';
 // Include database configuration
 include 'layouts/config.php';
-
 $user_id = $_SESSION['id'] ?? null;
 
 if (!$user_id) {
     die("User not logged in.");
 }
 
-$permission_query = "SELECT canadd FROM users WHERE id = '$user_id'";
+// Query to fetch both 'canadd' and 'prefix'
+$permission_query = "SELECT canadd, prefix, username FROM users WHERE id = '$user_id'";
 $permission_result = mysqli_query($link, $permission_query);
+
+// Check for query execution success
+if (!$permission_result) {
+    die("Database query failed: " . mysqli_error($link));
+}
+
 $permissions = mysqli_fetch_assoc($permission_result);
 
 if ($permissions['canadd'] != 1) {
     header('Location: bons.php');
     exit();  // It's a good practice to call exit() after a redirect
 }
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
+// Retrieve prefix
+$prefix = $permissions['prefix'];
+
+// Count the number of rows that already have the same prefix
+$count_query = "SELECT COUNT(*) AS count FROM bon WHERE reference LIKE '$prefix-%'";  // Assuming 'reference' is the column storing the reference
+$count_result = mysqli_query($link, $count_query);
+
+if (!$count_result) {
+    die("Database query failed: " . mysqli_error($link));
+}
+
+$count_data = mysqli_fetch_assoc($count_result);
+$row_count = $count_data['count'] ?? 0;  // Default to 0 if no matching rows
+
+// Create the reference: prefix + '-' + the count + 1 (to avoid overwriting existing references)
+$reference = $prefix . '-' . ($row_count + 1);
+
+$user_id = $permissions['username'];
 
 echo '<pre>';
 print_r($_POST);
@@ -30,14 +52,12 @@ echo '</pre>';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $reference = $_POST['reference'];
     $sequence_reference = $_POST['sequence_reference'];
-    $user_id = $_POST['user_id'];
     $user_name = $_POST['user_name'];
     $company_id = $_POST['company_id'];
     $site_id = $_POST['site_id'];
     $date_of_bon = $_POST['date'];
-    $total_one = $_POST['amoun_1'];
+    $total_one = $_POST['amount_1'];
     $currency_one = $_POST['currency_1'];
     $total_two = !empty($_POST['amount_2']) ? $_POST['amount_2'] : null;
     $currency_two = !empty($_POST['currency_2']) ? $_POST['currency_2'] : null;

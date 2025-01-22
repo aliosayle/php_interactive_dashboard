@@ -10,12 +10,6 @@ $permission_query = "SELECT canedit FROM users WHERE id = '$user_id'";
 $permission_result = mysqli_query($link, $permission_query);
 $permissions = mysqli_fetch_assoc($permission_result);
 
-// Check if the user has 'canedit' set to 0
-if ($permissions['canedit'] == 0) {
-    header("Location: index.php"); // Redirect to index.php
-    exit(); // Make sure no further code is executed
-}
-
 
 $draw = isset($_POST['draw']) ? $_POST['draw'] : 0;
 $start = isset($_POST['start']) ? $_POST['start'] : 0;
@@ -114,12 +108,13 @@ while ($row = mysqli_fetch_assoc($dataResult)) {
                 </button>
             </form>
 
-            <form method='POST' action='design.php' style='display:inline-block;'>
-                <input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>
-                <button type='submit' class='btn btn-sm btn-secondary'>
-                    <i class='fas fa-print'></i>
-                </button>
-            </form>
+<form method='POST' action='design.php' style='display:inline-block;' target='_blank'>
+    <input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>
+    <button type='submit' class='btn btn-sm btn-secondary'>
+        <i class='fas fa-print'></i>
+    </button>
+</form>
+
         "
     ];
 }
