@@ -7,7 +7,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 
-$bon_id = $_POST['bon_id'];
+$bon_id = isset($_POST['bon_id']) ? $_POST['bon_id'] : (isset($_GET['bon_id']) ? $_GET['bon_id'] : null);
+
 // Fetch data from the bon table
 $query = "SELECT * FROM bon WHERE id = '$bon_id'"; // Replace 'some_id' with the actual id you want to fetch
 $result = mysqli_query($link, $query);
