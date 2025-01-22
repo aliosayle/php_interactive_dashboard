@@ -76,12 +76,7 @@
                                                     id="sequence_reference" required>
                                             </div>
 
-                                            <div class="mb-3">
-                                                <label for="user_id"
-                                                    class="form-label"><?= ($_SESSION['lang'] == 'fr' ? 'ID utilisateur' : 'User ID') ?></label>
-                                                <input class="form-control" type="text" name="user_id" id="user_id"
-                                                    required>
-                                            </div>
+
 
                                             <div class="mb-3">
                                                 <label for="company_id"
@@ -140,25 +135,22 @@
                                                 <select class="form-select" name="isvoided" id="isvoided" required>
                                                     <option value="1"><?= ($_SESSION['lang'] == 'fr' ? 'Oui' : 'Yes') ?>
                                                     </option>
-                                                    <option value="0"><?= ($_SESSION['lang'] == 'fr' ? 'Non' : 'No') ?>
+                                                    <option value="0" selected><?= ($_SESSION['lang'] == 'fr' ? 'Non' : 'No') ?>
                                                     </option>
                                                 </select>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="date"
-                                                    class="form-label"><?= ($_SESSION['lang'] == 'fr' ? 'Date de la transaction' : 'Transaction Date') ?></label>
-                                                <input class="form-control" type="date" name="date" id="date" required>
-                                            </div>
+    <label for="date" class="form-label">
+        <?= ($_SESSION['lang'] == 'fr' ? 'Date de la transaction' : 'Transaction Date') ?>
+    </label>
+    <input class="form-control" type="date" name="date" id="date" required value="<?= date('Y-m-d') ?>">
+</div>
+
                                         </div>
 
                                         <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="user_name"
-                                                    class="form-label"><?= ($_SESSION['lang'] == 'fr' ? 'Nom de l\'utilisateur' : 'User Name') ?></label>
-                                                <input class="form-control" type="text" name="user_name" id="user_name"
-                                                    required>
-                                            </div>
+
 
                                             <div class="mb-3">
                                                 <label for="site_id"
@@ -197,7 +189,7 @@
                                                     <?= ($_SESSION['lang'] == 'fr' ? 'Motif' : 'Motive') ?>
                                                 </label>
                                                 <input class="form-control" type="text" name="motive" id="motive"
-                                                    maxlength="50" required>
+                                                    maxlength="100" required>
                                             </div>
 
                                             <div class="mb-3">

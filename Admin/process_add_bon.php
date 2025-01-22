@@ -44,7 +44,8 @@ $row_count = $count_data['count'] ?? 0;  // Default to 0 if no matching rows
 // Create the reference: prefix + '-' + the count + 1 (to avoid overwriting existing references)
 $reference = $prefix . '-' . ($row_count + 1);
 
-$user_id = $permissions['username'];
+$user_name = $permissions['username'];
+$user_id = $_SESSION['id'];
 
 echo '<pre>';
 print_r($_POST);
