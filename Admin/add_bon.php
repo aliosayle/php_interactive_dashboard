@@ -181,7 +181,7 @@
                                                 <label for="account_number"
                                                     class="form-label"><?= ($_SESSION['lang'] == 'fr' ? 'Numéro de compte' : 'Account Number') ?></label>
                                                 <input class="form-control" type="text" name="account_number"
-                                                    id="account_number" required>
+                                                    id="account_number">
                                             </div>
 
                                             <div class="mb-3">
