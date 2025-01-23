@@ -100,7 +100,7 @@
                                                 <label for="amount_1"
                                                     class="form-label"><?= ($_SESSION['lang'] == 'fr' ? 'Montant 1' : 'Amount 1') ?></label>
                                                 <input class="form-control" type="number" step="0.01" name="amount_1"
-                                                    id="amount_1" required>
+                                                    id="amount_1" value="0.0" required>
                                             </div>
 
                                             <div class="mb-3">
@@ -114,11 +114,12 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="amount_2"
-                                                    class="form-label"><?= ($_SESSION['lang'] == 'fr' ? 'Montant 2' : 'Amount 2') ?></label>
-                                                <input class="form-control" type="number" step="0.01" name="amount_2"
-                                                    id="amount_2">
-                                            </div>
+    <label for="amount_2" class="form-label">
+        <?= ($_SESSION['lang'] == 'fr' ? 'Montant 2' : 'Amount 2') ?>
+    </label>
+    <input class="form-control" type="number" step="0.01" name="amount_2" id="amount_2" value="0.0">
+</div>
+
 
                                             <div class="mb-3">
                                                 <label for="currency_2"
