@@ -1,6 +1,6 @@
 <header id="page-topbar">
     <div class="navbar-header">
-        <div class="d-flex">
+        <div class="d-flex align-items-center"> <!-- Added align-items-center for vertical centering -->
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <a href="companies.php" class="logo logo-dark">
@@ -27,8 +27,25 @@
             </button>
         </div>
 
-        <div class="d-flex">
+        <div class="d-flex align-items-center"> <!-- Added align-items-center here as well -->
+            <!-- Add Bon Button -->
+            <!-- Conditionally display the "Add Bon" button if not on the "add_bon.php" page -->
+            <?php if (basename($_SERVER['PHP_SELF']) !== 'add_bon.php'): ?>
+                <form method="GET" action="add_bon.php" class="mb-0 d-inline">
+                    <button type="submit" class="btn btn-primary" style="margin-right: 20px;"
+                        <?php 
+                        // Example permission logic
+                        $permissions = ['canadd' => 1]; // Change this value to 0 to test the disabled button
+                        if ($permissions['canadd'] == 0) {
+                            echo 'style="pointer-events: none; opacity: 0.6;"'; 
+                        } 
+                        ?>>
+                        <i class="fas fa-plus me-2"></i> Add Bon
+                    </button>
+                </form>
+            <?php endif; ?>
 
+            <!-- Search Dropdown -->
             <div class="dropdown d-inline-block d-lg-none ms-2">
                 <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -50,6 +67,7 @@
                 </div>
             </div>
 
+            <!-- Language Dropdown -->
             <div class="dropdown d-none d-sm-inline-block">
                 <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -61,23 +79,20 @@
                     <?php } ?>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
-
-<!-- item -->
-<a href="?lang=en" class="dropdown-item notify-item language" onclick="document.location.href='set_lang.php?lang=en';">
-    <img src="assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12">
-    <span class="align-middle"> English </span>
-</a>
-
-<!-- item -->
-<a href="?lang=fr" class="dropdown-item notify-item language" onclick="document.location.href='set_lang.php?lang=fr';">
-    <img src="assets/images/flags/france.jpg" alt="user-image" class="me-1" height="12">
-    <span class="align-middle"> French </span>
-</a>
-
-</div>
-
+                    <a href="?lang=en" class="dropdown-item notify-item language"
+                        onclick="document.location.href='set_lang.php?lang=en';">
+                        <img src="assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12">
+                        <span class="align-middle"> English </span>
+                    </a>
+                    <a href="?lang=fr" class="dropdown-item notify-item language"
+                        onclick="document.location.href='set_lang.php?lang=fr';">
+                        <img src="assets/images/flags/france.jpg" alt="user-image" class="me-1" height="12">
+                        <span class="align-middle"> French </span>
+                    </a>
+                </div>
             </div>
 
+            <!-- Dark/Light Mode Button -->
             <div class="dropdown d-none d-sm-inline-block">
                 <button type="button" class="btn header-item" id="mode-setting-btn">
                     <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
@@ -85,12 +100,7 @@
                 </button>
             </div>
 
-            <!-- <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item right-bar-toggle me-2">
-                    <i data-feather="settings" class="icon-lg"></i>
-                </button>
-            </div> -->
-
+            <!-- User Profile Dropdown -->
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item bg-light-subtle border-start border-end"
                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -98,18 +108,16 @@
                         alt="Header Avatar">
                     <span class="d-none d-xl-inline-block ms-1 fw-medium">
                         <?php
-                        // Check if the user is logged in and display their username
                         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-                            echo htmlspecialchars($_SESSION["username"]); // Display logged-in username
+                            echo htmlspecialchars($_SESSION["username"]);
                         } else {
-                            echo "Guest"; // Default name if no user is logged in
+                            echo "Guest";
                         }
                         ?>
                     </span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <!-- item-->
                     <a class="dropdown-item" href="apps-contacts-profile.php"><i
                             class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i>
                         <?php echo $language["Profile"]; ?></a>
@@ -122,10 +130,11 @@
                         <?php echo $language["Logout"]; ?></a>
                 </div>
             </div>
-
         </div>
     </div>
 </header>
+
+
 
 <!-- ========== Left Sidebar Start ========== -->
 <!-- ========== Left Sidebar Start ========== -->
@@ -143,27 +152,27 @@
                         <i data-feather="users"></i>
                         <span data-key="t-authentication">Apps</span>
                     </a>
-                    
+
                     <ul class="sub-menu" aria-expanded="false">
-    <li>
-        <a href="sites.php" data-key="t-data-tables">
-            <i class="fas fa-map-marker-alt me-2" style="font-size: 16px;"></i> 
-            <?= $lang == 'fr' ? 'Sites' : 'Sites' ?>
-        </a>
-    </li>
-    <li>
-        <a href="companies.php" data-key="t-data-tables">
-            <i class="fas fa-building me-2" style="font-size: 16px;"></i> 
-            <?= $lang == 'fr' ? 'Entreprises' : 'Companies' ?>
-        </a>
-    </li>
-    <li>
-        <a href="bons.php" data-key="t-lock-screen">
-            <i class="fas fa-file-invoice me-2" style="font-size: 16px;"></i> 
-            <?= $lang == 'fr' ? 'Bons' : 'Bons' ?>
-        </a>
-    </li>
-</ul>
+                        <li>
+                            <a href="sites.php" data-key="t-data-tables">
+                                <i class="fas fa-map-marker-alt me-2" style="font-size: 16px;"></i>
+                                <?= $lang == 'fr' ? 'Sites' : 'Sites' ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="companies.php" data-key="t-data-tables">
+                                <i class="fas fa-building me-2" style="font-size: 16px;"></i>
+                                <?= $lang == 'fr' ? 'Entreprises' : 'Companies' ?>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="bons.php" data-key="t-lock-screen">
+                                <i class="fas fa-file-invoice me-2" style="font-size: 16px;"></i>
+                                <?= $lang == 'fr' ? 'Bons' : 'Bons' ?>
+                            </a>
+                        </li>
+                    </ul>
 
                 </li>
             </ul>

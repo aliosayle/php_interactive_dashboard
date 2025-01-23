@@ -70,10 +70,12 @@
 
 
                                             <div class="mb-3">
-                                                <label for="sequence_reference"
-                                                    class="form-label"><?= ($_SESSION['lang'] == 'fr' ? 'Référence de séquence' : 'Sequence Reference') ?></label>
+                                                <label for="sequence_reference" class="form-label">
+                                                    <?= ($_SESSION['lang'] == 'fr' ? 'Référence de commande' : 'Order Reference') ?>
+                                                </label>
+
                                                 <input class="form-control" type="text" name="sequence_reference"
-                                                    id="sequence_reference" required>
+                                                    id="sequence_reference">
                                             </div>
 
 
@@ -114,11 +116,12 @@
                                             </div>
 
                                             <div class="mb-3">
-    <label for="amount_2" class="form-label">
-        <?= ($_SESSION['lang'] == 'fr' ? 'Montant 2' : 'Amount 2') ?>
-    </label>
-    <input class="form-control" type="number" step="0.01" name="amount_2" id="amount_2" value="0.0">
-</div>
+                                                <label for="amount_2" class="form-label">
+                                                    <?= ($_SESSION['lang'] == 'fr' ? 'Montant 2' : 'Amount 2') ?>
+                                                </label>
+                                                <input class="form-control" type="number" step="0.01" name="amount_2"
+                                                    id="amount_2" value="0.0">
+                                            </div>
 
 
                                             <div class="mb-3">
@@ -136,17 +139,19 @@
                                                 <select class="form-select" name="isvoided" id="isvoided" required>
                                                     <option value="1"><?= ($_SESSION['lang'] == 'fr' ? 'Oui' : 'Yes') ?>
                                                     </option>
-                                                    <option value="0" selected><?= ($_SESSION['lang'] == 'fr' ? 'Non' : 'No') ?>
+                                                    <option value="0" selected>
+                                                        <?= ($_SESSION['lang'] == 'fr' ? 'Non' : 'No') ?>
                                                     </option>
                                                 </select>
                                             </div>
 
                                             <div class="mb-3">
-    <label for="date" class="form-label">
-        <?= ($_SESSION['lang'] == 'fr' ? 'Date de la transaction' : 'Transaction Date') ?>
-    </label>
-    <input class="form-control" type="date" name="date" id="date" required value="<?= date('Y-m-d') ?>">
-</div>
+                                                <label for="date" class="form-label">
+                                                    <?= ($_SESSION['lang'] == 'fr' ? 'Date de la transaction' : 'Transaction Date') ?>
+                                                </label>
+                                                <input class="form-control" type="date" name="date" id="date" required
+                                                    value="<?= date('Y-m-d') ?>">
+                                            </div>
 
                                         </div>
 

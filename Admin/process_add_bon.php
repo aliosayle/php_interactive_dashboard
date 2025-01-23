@@ -53,7 +53,7 @@ echo '</pre>';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $sequence_reference = $_POST['sequence_reference'];
+    $sequence_reference = isset($_POST['sequence_reference']) ? $_POST['sequence_reference'] : '';
     $user_name = $_POST['user_name'];
     $company_id = $_POST['company_id'];
     $site_id = $_POST['site_id'];

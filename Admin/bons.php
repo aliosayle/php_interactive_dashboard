@@ -148,11 +148,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                     <h4 class="card-title">Bons</h4>
                                 </div>
                                 <div class="card-body">
-                                <form method="POST" action="add_bon.php" class="mb-4">
+                                <!-- <form method="POST" action="add_bon.php" class="mb-4">
                                     <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0) echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
                                         <i class="fas fa-plus me-2"></i> Add Bon
                                     </button>
-                                </form>
+                                </form> -->
 
 
                                     <div class="table-responsive">
@@ -258,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
     <script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
     <!-- uncomment the line below to make the table rows expandable -->
-    <!-- <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script> -->
+    <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
     <script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
