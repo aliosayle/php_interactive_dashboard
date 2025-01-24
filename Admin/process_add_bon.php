@@ -179,19 +179,23 @@ $sql = "INSERT INTO bon
         '$amount_in_lettres', '$beneficier_name', '$motive', '$account_number', '$is_voided', '$comments')";
 
 echo $sql;
+// Execute the query
 if (mysqli_query($link, $sql)) {
-    // Fetch the last inserted ID
-    $bon_id = mysqli_insert_id($link);
+    // Retrieve the UUID for the last inserted row
+    $query = "SELECT id FROM bon WHERE reference = '$reference'";
+    $result = mysqli_query($link, $query);
 
-    // Open design.php in a new tab with the bon_id as a URL parameter
-    echo "<script type='text/javascript'>
-            window.open('design.php?bon_id=$bon_id', '_blank');
-            window.location.href = 'bons.php'; // Optionally, redirect to bons.php after opening the new tab
-          </script>";
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $bon_id = $row['id'];
+        header("Location: design.php?bon_id=$bon_id");
+        exit();
+    } else {
+        echo "Error retrieving UUID: " . mysqli_error($link);
+    }
 } else {
-    echo "Error: " . mysqli_error($link);
+    echo "Error executing query: " . mysqli_error($link);
 }
-
 
 
 }

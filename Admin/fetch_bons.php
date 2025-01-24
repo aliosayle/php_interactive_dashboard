@@ -10,14 +10,12 @@ $permission_query = "SELECT canedit FROM users WHERE id = '$user_id'";
 $permission_result = mysqli_query($link, $permission_query);
 $permissions = mysqli_fetch_assoc($permission_result);
 
-
 $draw = isset($_POST['draw']) ? $_POST['draw'] : 0;
 $start = isset($_POST['start']) ? $_POST['start'] : 0;
 $length = isset($_POST['length']) ? $_POST['length'] : 10; // Default to 10 records per page
-// Get search term from DataTables request
 $searchValue = isset($_POST['searchValue']) ? $_POST['searchValue'] : ''; // Fetch the search term
 
-// Query to fetch data
+// Base query to fetch data
 $baseQuery = "SELECT bon.*, 
                 sites.name AS site_name, 
                 companies.name AS company_name 
@@ -35,22 +33,20 @@ if (!empty($searchValue)) {
         bon.account_number LIKE '%" . mysqli_real_escape_string($link, $searchValue) . "%'"; // Added account_number search
 }
 
-
-
 // Count total records (without limit)
 $totalRecordsResult = mysqli_query($link, str_replace('SELECT bon.*', 'SELECT COUNT(*) as count', $baseQuery));
 $totalRecords = mysqli_fetch_assoc($totalRecordsResult)['count'];
 
-// Add pagination and sorting
-$length = isset($_POST['length']) ? $_POST['length'] : 10; // Default to 10 records per page
+// Default sorting by created_at (latest first)
+$defaultOrderBy = "bon.created_at DESC";
 
-// Get the column index and order direction from the DataTables request
-$orderColumn = isset($_POST['order'][0]['column']) ? $_POST['order'][0]['column'] : 0;  // Default to first column
-$orderDir = isset($_POST['order'][0]['dir']) ? $_POST['order'][0]['dir'] : 'asc';  // Default to ascending
+// Check if sorting is requested by DataTables
+$orderColumn = isset($_POST['order'][0]['column']) ? $_POST['order'][0]['column'] : null;
+$orderDir = isset($_POST['order'][0]['dir']) ? $_POST['order'][0]['dir'] : null;
 
 // Map the column index to the actual column name (adjust if needed)
 $columns = [
-    'reference', 
+    'created_at', 
     'beneficier_name', 
     'date_of_bon', 
     'total_one', 
@@ -64,22 +60,30 @@ $columns = [
     'is_voided', 
     'comments'
 ];
-$orderBy = $columns[$orderColumn];
+
+// Apply sorting based on request or default to created_at DESC
+if ($orderColumn !== null && isset($columns[$orderColumn])) {
+    $orderBy = $columns[$orderColumn] . " " . ($orderDir === 'asc' ? 'DESC' : 'ASC');
+} else {
+    $orderBy = $defaultOrderBy; // Default sorting by created_at DESC
+}
+
+// Add ORDER BY clause to the base query
+$baseQuery .= " ORDER BY $orderBy";
 
 // If length is -1 (All), remove the LIMIT clause
 if ($length == -1) {
-    $baseQuery .= " ORDER BY $orderBy $orderDir";  // Apply sorting without pagination
+    // No LIMIT clause needed
 } else {
-    $baseQuery .= " ORDER BY $orderBy $orderDir LIMIT $start, $length";  // Apply sorting with pagination
+    $baseQuery .= " LIMIT $start, $length";  // Apply pagination
 }
-
 
 // Fetch data
 $dataResult = mysqli_query($link, $baseQuery);
 $data = [];
 while ($row = mysqli_fetch_assoc($dataResult)) {
     $data[] = [
-'reference' => isset($row['reference']) ? "<a href='design.php?bon_id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['reference']) . "</a>" : '',
+        'reference' => isset($row['reference']) ? "<a href='design.php?bon_id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['reference']) . "</a>" : '',
         'beneficier_name' => isset($row['beneficier_name']) ? htmlspecialchars($row['beneficier_name']) : '',
         'date_of_bon' => isset($row['date_of_bon']) ? htmlspecialchars($row['date_of_bon']) : '',
         'total_one' => isset($row['total_one']) ? htmlspecialchars($row['total_one']) : '',
@@ -108,13 +112,9 @@ while ($row = mysqli_fetch_assoc($dataResult)) {
                 </button>
             </form>
 
-<form method='POST' action='design.php' style='display:inline-block;' target='_blank'>
-    <input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>
-    <button type='submit' class='btn btn-sm btn-secondary'>
-        <i class='fas fa-print'></i>
-    </button>
-</form>
-
+            <button type='button' class='btn btn-sm btn-secondary print-btn' data-bon-id='" . htmlspecialchars($row['id']) . "'>
+                <i class='fas fa-print'></i>
+            </button>
         "
     ];
 }
@@ -128,5 +128,4 @@ $response = [
 ];
 
 echo json_encode($response);
-
 ?>

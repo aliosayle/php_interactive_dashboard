@@ -274,8 +274,15 @@ File: Main Js File
     }
 
     function updateRadio(radioId) {
-        document.getElementById(radioId).checked = true;
+        console.log("radioId:", radioId);
+        const radioElement = document.getElementById(radioId);
+        if (!radioElement) {
+            console.warn(`Element with ID ${radioId} not found.`);
+            return; // Stop execution if the element doesn't exist
+        }
+        radioElement.checked = true;
     }
+    
 
     function layoutSetting() {
         var body = document.getElementsByTagName("body")[0];
@@ -312,20 +319,96 @@ File: Main Js File
             return;
         });
 
-        if(body.hasAttribute("data-layout") && body.getAttribute("data-layout") == "horizontal") {
-            updateRadio('layout-horizontal');
-            $(".sidebar-setting").hide();
-        } else {
-            updateRadio('layout-vertical');
-        }
-        (body.hasAttribute("data-bs-theme") && body.getAttribute("data-bs-theme") == "dark") ? updateRadio('layout-mode-dark'): updateRadio('layout-mode-light');
-        (body.hasAttribute("data-layout-size") && body.getAttribute("data-layout-size") == "boxed") ? updateRadio('layout-width-boxed'): updateRadio('layout-width-fuild');
-        (body.hasAttribute("data-layout-scrollable") && body.getAttribute("data-layout-scrollable") == "true") ? updateRadio('layout-position-scrollable'): updateRadio('layout-position-fixed');
-        (body.hasAttribute("data-topbar") && body.getAttribute("data-topbar") == "dark") ? updateRadio('topbar-color-dark'): updateRadio('topbar-color-light');
-        (body.hasAttribute("data-sidebar-size") && body.getAttribute("data-sidebar-size") == "sm") ? updateRadio('sidebar-size-small') : (body.hasAttribute("data-sidebar-size") && body.getAttribute("data-sidebar-size") == "md") ? updateRadio('sidebar-size-compact') : updateRadio('sidebar-size-default');
-        (body.hasAttribute("data-sidebar") && body.getAttribute("data-sidebar") == "brand") ? updateRadio('sidebar-color-brand') : (body.hasAttribute("data-sidebar") && body.getAttribute("data-sidebar") == "dark") ? updateRadio('sidebar-color-dark') : updateRadio('sidebar-color-light');
-        (document.getElementsByTagName("html")[0].hasAttribute("dir") && document.getElementsByTagName("html")[0].getAttribute("dir") == "rtl") ? updateRadio('layout-direction-rtl'): updateRadio('layout-direction-ltr');
+ 
+// Inside your condition block
+if (body.hasAttribute("data-layout") && body.getAttribute("data-layout") == "horizontal") {
+    if (document.getElementById('layout-horizontal')) {
+        updateRadio('layout-horizontal');
+    }
+    $(".sidebar-setting").hide();
+} else {
+    if (document.getElementById('layout-vertical')) {
+        updateRadio('layout-vertical');
+    }
+}
 
+if (body.hasAttribute("data-bs-theme") && body.getAttribute("data-bs-theme") == "dark") {
+    if (document.getElementById('layout-mode-dark')) {
+        updateRadio('layout-mode-dark');
+    }
+} else {
+    if (document.getElementById('layout-mode-light')) {
+        updateRadio('layout-mode-light');
+    }
+}
+
+if (body.hasAttribute("data-layout-size") && body.getAttribute("data-layout-size") == "boxed") {
+    if (document.getElementById('layout-width-boxed')) {
+        updateRadio('layout-width-boxed');
+    }
+} else {
+    if (document.getElementById('layout-width-fuild')) {
+        updateRadio('layout-width-fuild');
+    }
+}
+
+if (body.hasAttribute("data-layout-scrollable") && body.getAttribute("data-layout-scrollable") == "true") {
+    if (document.getElementById('layout-position-scrollable')) {
+        updateRadio('layout-position-scrollable');
+    }
+} else {
+    if (document.getElementById('layout-position-fixed')) {
+        updateRadio('layout-position-fixed');
+    }
+}
+
+if (body.hasAttribute("data-topbar") && body.getAttribute("data-topbar") == "dark") {
+    if (document.getElementById('topbar-color-dark')) {
+        updateRadio('topbar-color-dark');
+    }
+} else {
+    if (document.getElementById('topbar-color-light')) {
+        updateRadio('topbar-color-light');
+    }
+}
+
+if (body.hasAttribute("data-sidebar-size") && body.getAttribute("data-sidebar-size") == "sm") {
+    if (document.getElementById('sidebar-size-small')) {
+        updateRadio('sidebar-size-small');
+    }
+} else if (body.hasAttribute("data-sidebar-size") && body.getAttribute("data-sidebar-size") == "md") {
+    if (document.getElementById('sidebar-size-compact')) {
+        updateRadio('sidebar-size-compact');
+    }
+} else {
+    if (document.getElementById('sidebar-size-default')) {
+        updateRadio('sidebar-size-default');
+    }
+}
+
+if (body.hasAttribute("data-sidebar") && body.getAttribute("data-sidebar") == "brand") {
+    if (document.getElementById('sidebar-color-brand')) {
+        updateRadio('sidebar-color-brand');
+    }
+} else if (body.hasAttribute("data-sidebar") && body.getAttribute("data-sidebar") == "dark") {
+    if (document.getElementById('sidebar-color-dark')) {
+        updateRadio('sidebar-color-dark');
+    }
+} else {
+    if (document.getElementById('sidebar-color-light')) {
+        updateRadio('sidebar-color-light');
+    }
+}
+
+if (document.getElementsByTagName("html")[0].hasAttribute("dir") && document.getElementsByTagName("html")[0].getAttribute("dir") == "rtl") {
+    if (document.getElementById('layout-direction-rtl')) {
+        updateRadio('layout-direction-rtl');
+    }
+} else {
+    if (document.getElementById('layout-direction-ltr')) {
+        updateRadio('layout-direction-ltr');
+    }
+}
         // on layou change
         $("input[name='layout']").on('change', function () {
             window.location.href = ($(this).val() == "vertical") ? "index": "layouts-horizontal";

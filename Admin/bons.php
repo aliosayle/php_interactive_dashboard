@@ -95,8 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     } else {
         echo "<script>alert('Error adding bon: " . mysqli_error($link) . "');</script>";
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo "<script>alert('You do not have permission to add Bons.');</script>";
 }
 ?>
 
@@ -116,13 +114,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.dataTables.min.css">
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
+    <style>
+        .modal-backdrop {
+    z-index: 1040 !important;
+}
 
+.modal {
+    z-index: 1050 !important;
+}
 
-
-
+    </style>
 </head>
 
 <body>
@@ -132,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
         <?php include 'layouts/menu.php'; ?>
         <div class="main-content">
             <div class="page-content">
+
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
@@ -153,7 +158,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                         <i class="fas fa-plus me-2"></i> Add Bon
                                     </button>
                                 </form> -->
-
+                <!-- Modal -->
+                <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="printModalLabel">Print Bon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="printModalBody">
+                <!-- Content from design.php will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="printModalContent()">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
 
                                     <div class="table-responsive">
                                         <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
@@ -177,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $query = "SELECT * FROM bon"; // Query to fetch all data from the 'bon' table
+                                                $query = "SELECT * FROM bon ORDER BY 'created_at' DESC"; // Query to fetch all data from the 'bon' table
                                                 $result = mysqli_query($link, $query);
                                                 if (!$result) {
                                                     die("Query failed: " . mysqli_error($link));
@@ -218,10 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
 
 
                                                         // Print Button with FontAwesome icon
-                                                        echo "<form method='POST' action='design.php' style='display:inline-block;'>";
-                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
-                                                        echo "<button type='submit' class='btn btn-sm btn-secondary'><i class='fas fa-print'></i></button>";
-                                                        echo "</form>";
+                                                        echo "<button type='button' class='btn btn-sm btn-secondary print-btn' data-bon-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-print'></i></button>";
 
 
                                                         echo  "</td>";
@@ -267,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <script src="assets/js/app.js"></script>
     <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="https://cdn.datatables.net/colreorder/1.6.2/js/dataTables.colReorder.min.js"></script>
-
+    <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.3.2/js/dataTables.fixedHeader.min.js"></script>
 
 
     <script>
@@ -285,7 +304,6 @@ $('#datatable').DataTable({
             ]
         }
     ],
-
     "lengthMenu": [
         [10, 25, 50, -1],
         [10, 25, 50, "All"]
@@ -322,12 +340,62 @@ $('#datatable').DataTable({
         { "data": "is_voided" },
         { "data": "comments" },
         { "data": "actions" }
-    ]
+    ],
+    "fixedHeader": true // Enable sticky headers
 });
 
 
 </script>
 
+<script>
+    $(document).ready(function () {
+        // Handle print button click
+        $(document).on('click', '.print-btn', function () {
+            var bonId = $(this).data('bon-id'); // Get the bon ID from the button
+
+            // Fetch content from design.php using AJAX
+            $.ajax({
+                url: 'design.php',
+                type: 'GET',
+                data: { bon_id: bonId }, // Pass the bon ID to design.php
+                success: function (response) {
+                    $('#printModalBody').html(response); // Load the response into the modal body
+                    $('#printModal').modal('show'); // Show the modal
+                },
+                error: function () {
+                    alert('Error loading print content.');
+                }
+            });
+        });
+
+        // Function to print the modal content
+        function printModalContent() {
+            var printContents = document.getElementById('printModalBody').innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload(); // Reload the page to restore the original content
+        }
+
+        // Function to dismiss the modal
+        function dismissModal() {
+            $('#printModal').modal('hide'); // Hide the modal using Bootstrap's method
+        }
+
+        // Print and dismiss modal after printing
+        function printAndDismissModal() {
+            printModalContent();
+            dismissModal();
+        }
+
+        // Attach the printAndDismissModal function to the Print button
+        $(document).on('click', '#printModal .btn-primary', function () {
+            printAndDismissModal();
+        });
+    });
+</script>
 
 <script>
     function confirmDelete(button) {

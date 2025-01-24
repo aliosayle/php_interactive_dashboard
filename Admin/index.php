@@ -95,8 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     } else {
         echo "<script>alert('Error adding bon: " . mysqli_error($link) . "');</script>";
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo "<script>alert('You do not have permission to add Bons.');</script>";
 }
 ?>
 
