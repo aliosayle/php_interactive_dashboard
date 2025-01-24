@@ -83,7 +83,7 @@ $dataResult = mysqli_query($link, $baseQuery);
 $data = [];
 while ($row = mysqli_fetch_assoc($dataResult)) {
     $data[] = [
-        'reference' => isset($row['reference']) ? "<a href='design.php?bon_id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['reference']) . "</a>" : '',
+        'reference' => isset($row['reference']) ? htmlspecialchars($row['reference']) : '',
         'beneficier_name' => isset($row['beneficier_name']) ? htmlspecialchars($row['beneficier_name']) : '',
         'date_of_bon' => isset($row['date_of_bon']) ? htmlspecialchars($row['date_of_bon']) : '',
         'total_one' => isset($row['total_one']) ? htmlspecialchars($row['total_one']) : '',

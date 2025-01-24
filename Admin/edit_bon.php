@@ -5,6 +5,7 @@
 //enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
 ?>
 <head>
     <title>Edit Bon | Admin Dashboard</title>
@@ -23,7 +24,9 @@ ini_set('display_errors', 1);
 
 </head>
 
-<?php include 'layouts/body.php'; ?>
+<?php include 'layouts/body.php';
+$lang = isset($_SESSION['lang']) && in_array($_SESSION['lang'], ['en', 'fr']) ? $_SESSION['lang'] : 'en';
+?>
 
 <!-- Begin page -->
 
@@ -101,13 +104,7 @@ ini_set('display_errors', 1);
 
 <div class="row">
     <div class="col-lg-6">
-        <div class="mb-3">
-            <label for="reference" class="form-label">
-                <?= ($_SESSION['lang'] == 'fr' ? 'Référence' : 'Reference') ?>
-            </label>
-            <input class="form-control" type="text" name="reference" id="reference"
-                value="<?php echo htmlspecialchars($row['reference']); ?>" required>
-        </div>
+
 
         <div class="mb-3">
             <label for="sequence_reference" class="form-label">
@@ -117,13 +114,7 @@ ini_set('display_errors', 1);
                 id="sequence_reference" value="<?php echo htmlspecialchars($row['sequence_reference']); ?>" required>
         </div>
 
-        <div class="mb-3">
-            <label for="user_id" class="form-label">
-                <?= ($_SESSION['lang'] == 'fr' ? 'ID utilisateur' : 'User ID') ?>
-            </label>
-            <input class="form-control" type="text" name="user_id" id="user_id"
-                value="<?php echo htmlspecialchars($row['user_id']); ?>" required>
-        </div>
+
 
         <div class="mb-3">
             <label for="company_name" class="form-label">
@@ -206,13 +197,7 @@ ini_set('display_errors', 1);
     </div>
 
     <div class="col-lg-6">
-        <div class="mb-3">
-            <label for="username" class="form-label">
-                <?= ($_SESSION['lang'] == 'fr' ? 'Nom d\'utilisateur' : 'User Name') ?>
-            </label>
-            <input class="form-control" type="text" name="username" id="username"
-                value="<?php echo htmlspecialchars($row['username']); ?>" required>
-        </div>
+
 
         <div class="mb-3">
             <label for="site_name" class="form-label">

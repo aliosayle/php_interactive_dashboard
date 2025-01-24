@@ -188,7 +188,7 @@ if (mysqli_query($link, $sql)) {
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         $bon_id = $row['id'];
-        header("Location: design.php?bon_id=$bon_id");
+        header("Location: bons.php?bon_id=$bon_id");
         exit();
     } else {
         echo "Error retrieving UUID: " . mysqli_error($link);

@@ -113,19 +113,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.dataTables.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.dataTables.min.css">
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
     <style>
         .modal-backdrop {
-    z-index: 1040 !important;
-}
+            z-index: 1040 !important;
+        }
 
-.modal {
-    z-index: 1050 !important;
-}
-
+        .modal {
+            z-index: 1050 !important;
+        }
+        
     </style>
 </head>
 
@@ -148,114 +149,106 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
                                     </li>
                                 </ol>
                             </nav>
-                            <div class="card">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h4 class="card-title">Bons</h4>
-                                </div>
                                 <div class="card-body">
-                                <!-- <form method="POST" action="add_bon.php" class="mb-4">
-                                    <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0) echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
+                                    <!-- <form method="POST" action="add_bon.php" class="mb-4">
+                                    <button type="submit" class="btn btn-primary" <?php if ($permissions['canadd'] == 0)
+                                        echo 'style="pointer-events: none; opacity: 0.6;"'; ?>>
                                         <i class="fas fa-plus me-2"></i> Add Bon
                                     </button>
                                 </form> -->
-                <!-- Modal -->
-                <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="printModalLabel">Print Bon</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="printModalBody">
-                <!-- Content from design.php will be loaded here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="printModalContent()">Print</button>
-            </div>
-        </div>
-    </div>
-</div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="printModal" tabindex="-1"
+                                        aria-labelledby="printModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="printModalLabel">Print Bon</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body" id="printModalBody">
+                                                    <!-- Content from design.php will be loaded here -->
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary"
+                                                        onclick="printModalContent()">Print</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="table-responsive">
                                         <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
-                                            <thead>
-                                                <tr>
-                                                    <th><?php echo translate('reference', $lang); ?></th>
-                                                    <th><?php echo translate('beneficier_name', $lang); ?></th>
-                                                    <th><?php echo translate('date_of_bon', $lang); ?></th>
-                                                    <th><?php echo translate('total_one', $lang); ?></th>
-                                                    <th><?php echo translate('total_two', $lang); ?></th>
-                                                    <th><?php echo translate('currency_one', $lang); ?></th>
-                                                    <th><?php echo translate('currency_two', $lang); ?></th>
-                                                    <th><?php echo translate('site_name', $lang); ?></th>
-                                                    <th>Company Name</th>
-                                                    <th><?php echo translate('motif', $lang); ?></th>
-                                                    <th><?php echo translate('account_number', $lang); ?></th>
-                                                    <th><?php echo translate('is_voided', $lang); ?></th>
-                                                    <th><?php echo translate('comments', $lang); ?></th>
-                                                    <th><?php echo translate('actions', $lang); ?></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                $query = "SELECT * FROM bon ORDER BY 'created_at' DESC"; // Query to fetch all data from the 'bon' table
-                                                $result = mysqli_query($link, $query);
-                                                if (!$result) {
-                                                    die("Query failed: " . mysqli_error($link));
-                                                }
-                                                if (mysqli_num_rows($result) > 0) {
-                                                    while ($row = mysqli_fetch_assoc($result)) {
-                                                        echo "<tr>";
-                                                        echo "<td>" . htmlspecialchars($row['reference']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['beneficier_name']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['date_of_bon']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['total_one']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['total_two']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['currency_one']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['currency_two']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['name']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM companies WHERE id='" . mysqli_real_escape_string($link, $row['company_id']) . "'"))['name']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['account_number']) . "</td>";
-                                                        echo "<td>" . ($row['is_voided'] == 1 ? 'Yes' : 'No') . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['comments']) . "</td>";
-                                                        echo "<td>";
+                                        <thead>
+    <tr>
+        <th><?php echo translate('reference', $lang); ?></th>
+        <th><?php echo translate('beneficier_name', $lang); ?></th>
+        <th><?php echo translate('date_of_bon', $lang); ?></th>
+        <th><?php echo translate('total_one', $lang); ?></th>
+        <th><?php echo translate('total_two', $lang); ?></th>
+        <th><?php echo translate('site_name', $lang); ?></th>
+        <th>Company Name</th>
+        <th><?php echo translate('motif', $lang); ?></th>
+        <th><?php echo translate('account_number', $lang); ?></th>
+        <th><?php echo translate('is_voided', $lang); ?></th>
+        <th><?php echo translate('comments', $lang); ?></th>
+        <th><?php echo translate('actions', $lang); ?></th>
+    </tr>
+</thead>
+<tbody>
+    <?php
+    $query = "SELECT * FROM bon ORDER BY 'created_at' DESC"; // Query to fetch all data from the 'bon' table
+    $result = mysqli_query($link, $query);
+    if (!$result) {
+        die("Query failed: " . mysqli_error($link));
+    }
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['reference']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['beneficier_name']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['date_of_bon']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['total_one'] . ' ' . $row['currency_one']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['total_two'] . ' ' . $row['currency_two']) . "</td>";
+            echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM sites WHERE id='" . mysqli_real_escape_string($link, $row['site_id']) . "'"))['name']) . "</td>";
+            echo "<td>" . htmlspecialchars(mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM companies WHERE id='" . mysqli_real_escape_string($link, $row['company_id']) . "'"))['name']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['motif']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['account_number']) . "</td>";
+            echo "<td>" . ($row['is_voided'] == 1 ? 'Yes' : 'No') . "</td>";
+            echo "<td>" . htmlspecialchars($row['comments']) . "</td>";
+            echo "<td>";
 
-                                                        // Edit Button with FontAwesome icon
-                                                        echo "<form method='GET' action='edit_bon.php' style='display:inline-block;'>";
-                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
-                                                        echo "<button type='submit' class='btn btn-sm btn-info' " . ($permissions['canedit'] == 0 ? 'disabled' : '') . "><i class='fas fa-pencil-alt'></i></button>";
-                                                        echo "</form>";
+            // Edit Button with FontAwesome icon
+            echo "<form method='GET' action='edit_bon.php' style='display:inline-block;'>";
+            echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id']) . "'>";
+            echo "<button type='submit' class='btn btn-sm btn-info' " . ($permissions['canedit'] == 0 ? 'disabled' : '') . "><i class='fas fa-pencil-alt'></i></button>";
+            echo "</form>";
 
-                                                        // Delete Button with FontAwesome icon
-                                                        echo "<form method='GET' action='delete_bon.php' style='display:inline-block;' class='delete-form'>";
-                                                        echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') . "'>";
-                                                        echo "<button type='button' class='btn btn-sm btn-danger delete-btn' onclick='confirmDelete(this)'>";
-                                                        echo "<i class='fas fa-trash-alt'></i>";
-                                                        echo "</button>";
-                                                        echo "</form>";
-                                                                                                          
-                                                        
+            // Delete Button with FontAwesome icon
+            echo "<form method='GET' action='delete_bon.php' style='display:inline-block;' class='delete-form'>";
+            echo "<input type='hidden' name='bon_id' value='" . htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') . "'>";
+            echo "<button type='button' class='btn btn-sm btn-danger delete-btn' onclick='confirmDelete(this)'>";
+            echo "<i class='fas fa-trash-alt'></i>";
+            echo "</button>";
+            echo "</form>";
 
+            // Print Button with FontAwesome icon
+            echo "<button type='button' class='btn btn-sm btn-secondary print-btn' data-bon-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-print'></i></button>";
 
-                                                        // Print Button with FontAwesome icon
-                                                        echo "<button type='button' class='btn btn-sm btn-secondary print-btn' data-bon-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-print'></i></button>";
-
-
-                                                        echo  "</td>";
-                                                        echo "</tr>";
-                                                    }
-                                                } else {
-                                                    echo "<tr><td colspan='14' class='text-center'>" . translate('no_data_found', $lang) . "</td></tr>";
-                                                }
-                                                ?>
-                                            </tbody>
+            echo "</td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='14' class='text-center'>" . translate('no_data_found', $lang) . "</td></tr>";
+    }
+    ?>
+</tbody>
                                         </table>
                                     </div>
                                 </div>
 
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -286,69 +279,101 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bon_name']) && $permi
     <script src="assets/js/app.js"></script>
     <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="https://cdn.datatables.net/colreorder/1.6.2/js/dataTables.colReorder.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.3.2/js/dataTables.fixedHeader.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.datatables.net/fixedheader/3.3.2/js/dataTables.fixedHeader.min.js"></script>
 
 
-    <script>
-$('#datatable').DataTable({
-    "dom": '<"top"Bfr>ltip',
-    "buttons": [
-        {
-            "extend": 'collection',
-            "text": 'Export',
-            "buttons": [
-                'copy',
-                'csv',
-                'excel',
-                'pdf'
-            ]
-        }
-    ],
-    "lengthMenu": [
-        [10, 25, 50, -1],
-        [10, 25, 50, "All"]
-    ],
-    "columnDefs": [
-        {
-            "targets": '_all',
-            "width": "150px",
-            "className": "dt-center"
-        }
-    ],
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-        "url": "fetch_bons.php", // Path to your PHP script
-        "type": "POST",
-        "data": function(d) {
-            // Use the search term provided by DataTables
-            d.searchValue = d.search.value; // Pass search value (d.search.value) directly
-        }
-    },
-    "columns": [
-        { "data": "reference" },
-        { "data": "beneficier_name" },
-        { "data": "date_of_bon" },
-        { "data": "total_one" },
-        { "data": "total_two" },
-        { "data": "currency_one" },
-        { "data": "currency_two" },
-        { "data": "site_name" },
-        { "data": "company_name" },
-        { "data": "motif" },
-        { "data": "account_number" },
-        { "data": "is_voided" },
-        { "data": "comments" },
-        { "data": "actions" }
-    ],
-    "fixedHeader": true // Enable sticky headers
-});
-
-
+        <script>
+    $('#datatable').DataTable({
+        "dom": '<"top"Bfr>ltip',
+        "buttons": [
+            {
+                "extend": 'collection',
+                "text": 'Export',
+                "buttons": [
+                    'copy',
+                    'csv',
+                    'excel',
+                    'pdf'
+                ]
+            }
+        ],
+        "lengthMenu": [
+            [10, 25, 50, -1],
+            [10, 25, 50, "All"]
+        ],
+        "columnDefs": [
+            {
+                "targets": '_all',
+                "width": "150px",
+                "className": "dt-center"
+            }
+        ],
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": "fetch_bons.php", // Path to your PHP script
+            "type": "POST",
+            "data": function (d) {
+                // Use the search term provided by DataTables
+                d.searchValue = d.search.value; // Pass search value (d.search.value) directly
+            }
+        },
+        "columns": [
+            { "data": "reference" },
+            { "data": "beneficier_name" },
+            { "data": "date_of_bon" },
+            { 
+                "data": null, // Combined column for total_one and currency_one
+                "render": function(data, type, row) {
+                    return row.total_one + ' ' + row.currency_one;
+                }
+            },
+            { 
+                "data": null, // Combined column for total_two and currency_two
+                "render": function(data, type, row) {
+                    // Check if total_two is 0.0000
+                    if (parseFloat(row.total_two) === 0.0000) {
+                        return "No Amount"; // Display "No Amount" if total_two is 0.0000
+                    } else {
+                        return row.total_two + ' ' + row.currency_two; // Otherwise, display the amount and currency
+                    }
+                }
+            },
+            { "data": "site_name" },
+            { "data": "company_name" },
+            { "data": "motif" },
+            { "data": "account_number" },
+            { "data": "is_voided" },
+            { "data": "comments" },
+            { "data": "actions" }
+        ],
+        "fixedHeader": true // Enable sticky headers
+    });
 </script>
 
-<script>
+    <script>
     $(document).ready(function () {
+        // Check if bon_id is set in the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var bonId = urlParams.get('bon_id');
+
+        if (bonId) {
+            // Fetch content from design.php using AJAX
+            $.ajax({
+                url: 'design.php',
+                type: 'GET',
+                data: { bon_id: bonId }, // Pass the bon ID to design.php
+                success: function (response) {
+                    $('#printModalBody').html(response); // Load the response into the modal body
+                    $('#printModal').modal('show'); // Show the modal
+                },
+                error: function () {
+                    alert('Error loading print content.');
+                }
+            });
+        }
+
         // Handle print button click
         $(document).on('click', '.print-btn', function () {
             var bonId = $(this).data('bon-id'); // Get the bon ID from the button
@@ -395,27 +420,27 @@ $('#datatable').DataTable({
             printAndDismissModal();
         });
     });
-</script>
+    </script>
 
-<script>
-    function confirmDelete(button) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This action cannot be undone!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Find the parent form and submit it
-                button.closest('form').submit();
-            }
-        });
-    }
-</script>
+    <script>
+        function confirmDelete(button) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Find the parent form and submit it
+                    button.closest('form').submit();
+                }
+            });
+        }
+    </script>
 
 
 

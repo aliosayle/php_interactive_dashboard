@@ -116,7 +116,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['site_name']) && $perm
                                         <i class="fas fa-plus me-2"></i> <?php echo translate('add_new_site', $lang); ?>
                                     </button>
                                 </form>
+                                <?php
+$permission_query = "SELECT canedit, candelete, canadd FROM users WHERE id = '$user_id'";
+$permission_result = mysqli_query($link, $permission_query);
 
+if (!$permission_result) {
+    die("Query failed: " . mysqli_error($link));
+}
+
+$permissions = mysqli_fetch_assoc($permission_result);
+
+                                    ?>
                                 <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
