@@ -180,7 +180,14 @@ $sql = "INSERT INTO bon
 
 echo $sql;
 if (mysqli_query($link, $sql)) {
-    header("Location: bons.php");
+    // Fetch the last inserted ID
+    $bon_id = mysqli_insert_id($link);
+
+    // Open design.php in a new tab with the bon_id as a URL parameter
+    echo "<script type='text/javascript'>
+            window.open('design.php?bon_id=$bon_id', '_blank');
+            window.location.href = 'bons.php'; // Optionally, redirect to bons.php after opening the new tab
+          </script>";
 } else {
     echo "Error: " . mysqli_error($link);
 }
